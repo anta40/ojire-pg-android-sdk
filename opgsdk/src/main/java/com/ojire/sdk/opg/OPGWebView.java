@@ -2,8 +2,12 @@ package com.ojire.sdk.opg;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +15,7 @@ import androidx.annotation.Nullable;
 public class OPGWebView extends WebView  {
 
     private String foo;
+    private OPGListener listener;
 
     public void setFoo(String newFoo){
         this.foo = newFoo;
@@ -18,6 +23,10 @@ public class OPGWebView extends WebView  {
 
     public String getFoo(){
         return this.foo;
+    }
+
+    public void setaListener(OPGListener listener){
+        this.listener = listener;
     }
 
     public OPGWebView(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -38,5 +47,34 @@ public class OPGWebView extends WebView  {
             // Always recycle the TypedArray to avoid memory leaks
             a.recycle();
         }
+
+        setWebViewClient(new WebViewClient() {@Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                if (listener != null) {
+                    listener.onPageStarted(url);
+                }
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (listener != null) {
+                    listener.onPageFinished(url);
+                }
+            }
+
+            @Override
+            public void onReceivedError(
+                    WebView view,
+                    WebResourceRequest request,
+                    WebResourceError error) {
+
+                if (listener != null) {
+                    listener.onError(
+                            error.getErrorCode(),
+                            error.getDescription().toString()
+                    );
+                }
+            }
+        });
     }
 }
