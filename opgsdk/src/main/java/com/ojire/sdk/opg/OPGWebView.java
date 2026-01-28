@@ -16,6 +16,8 @@ public class OPGWebView extends WebView  {
 
     private String foo;
     private OPGListener listener;
+    private String currentUrl;
+    private boolean urlIsChanged;
 
     public void setFoo(String newFoo){
         this.foo = newFoo;
@@ -25,7 +27,7 @@ public class OPGWebView extends WebView  {
         return this.foo;
     }
 
-    public void setaListener(OPGListener listener){
+    public void setListener(OPGListener listener){
         this.listener = listener;
     }
 
@@ -50,15 +52,17 @@ public class OPGWebView extends WebView  {
 
         setWebViewClient(new WebViewClient() {@Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                urlIsChanged = true;
+                currentUrl = url;
                 if (listener != null) {
-                    listener.onPageStarted(url);
+                    listener.onPending(url);
                 }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (listener != null) {
-                    listener.onPageFinished(url);
+                    listener.onSuccess(url);
                 }
             }
 
@@ -69,10 +73,11 @@ public class OPGWebView extends WebView  {
                     WebResourceError error) {
 
                 if (listener != null) {
-                    listener.onError(
-                            error.getErrorCode(),
-                            error.getDescription().toString()
-                    );
+                    listener.onFailed(view.getUrl());
+//                    listener.onError(
+//                            error.getErrorCode(),
+//                            error.getDescription().toString()
+//                    );
                 }
             }
         });

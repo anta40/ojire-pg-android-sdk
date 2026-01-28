@@ -1,7 +1,8 @@
 package com.ojire.sdk.opg;
 
 public interface OPGListener {
-    void onPageStarted(String url);
-    void onPageFinished(String url);
-    void onError(int errorCode, String description);
+    void onSuccess(String url);
+    void onPending(String url);
+    void onFailed(String url);
+    void onClose();
 }
