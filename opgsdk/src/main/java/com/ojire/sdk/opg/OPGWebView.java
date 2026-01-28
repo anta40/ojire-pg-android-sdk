@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -51,14 +52,25 @@ public class OPGWebView extends WebView  {
         super(context, attrs);
         init(context, attrs);
 
-        setWebViewClient(new WebViewClient() {@Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            urlIsChanged = true;
-            currentUrl = url;
-            if (listener != null) {
-                listener.onPending(url);
+        setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onCloseWindow(WebView window) {
+                super.onCloseWindow(window);
+                if (listener != null){
+                    listener.onClose();
+                }
             }
-        }
+        });
+
+        setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                urlIsChanged = true;
+                currentUrl = url;
+                if (listener != null) {
+                    listener.onPending(url);
+                }
+            }
 
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -81,6 +93,7 @@ public class OPGWebView extends WebView  {
 //                    );
                 }
             }
+
         });
     }
 
@@ -97,5 +110,11 @@ public class OPGWebView extends WebView  {
             // Always recycle the TypedArray to avoid memory leaks
             a.recycle();
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        listener.onClose();
     }
 }
