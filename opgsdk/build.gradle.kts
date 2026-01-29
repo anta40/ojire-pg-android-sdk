@@ -44,15 +44,30 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            // This line is the most important:
+            afterEvaluate {
                 from(components["release"])
-                groupId = "com.github.anta40"
-                artifactId = "opgsdk"
-                version = "0.0.2"
             }
+
+            groupId = "com.github.anta40"
+            artifactId = "opgsdk"
+            version = "0.0.2"
         }
     }
 }
+
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            create<MavenPublication>("release") {
+//                from(components["release"])
+//                groupId = "com.github.anta40"
+//                artifactId = "opgsdk"
+//                version = "0.0.2"
+//            }
+//        }
+//    }
+//}
