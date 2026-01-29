@@ -34,7 +34,7 @@ android {
 }
 
 group = "com.github.anta40"
-version = "0.0.1"
+version = "0.0.2"
 
 dependencies {
     implementation(libs.appcompat)
@@ -51,7 +51,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.anta40"
                 artifactId = "android-opg-sdk"
-                version = "0.0.1"
+                version = "0.0.2"
             }
         }
     }
