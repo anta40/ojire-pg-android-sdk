@@ -17,11 +17,24 @@ import androidx.annotation.Nullable;
 
 public class OPGWebView extends WebView  {
 
+
+    enum OPGSTATE  {
+            PENDING,
+            SUCCESS,
+            CLOSE,
+        FAILED
+    }
+
     private String foo;
     private OPGListener listener;
     private String currentUrl;
     private boolean urlIsChanged;
     private Context ctxt;
+    private OPGSTATE state;
+
+    public OPGSTATE getState(){
+        return state;
+    }
 
     public OPGWebView(Context ctxt){
         super(ctxt);
@@ -45,6 +58,7 @@ public class OPGWebView extends WebView  {
         ((Activity)ctxt).finish();
         if (listener != null){
             listener.onClose();
+            this.state = OPGSTATE.CLOSE;
         }
     }
 
@@ -59,6 +73,7 @@ public class OPGWebView extends WebView  {
                 if (listener != null){
                     if (window.getUrl().contains("action=close")) {
                         listener.onClose();
+                        state = OPGSTATE.CLOSE;
                     }
                 }
             }
@@ -72,6 +87,7 @@ public class OPGWebView extends WebView  {
                 if (listener != null) {
                     if (url.contains("status=pending")) {
                         listener.onPending(url);
+                        state = OPGSTATE.PENDING;
                     }
                 }
             }
@@ -81,6 +97,7 @@ public class OPGWebView extends WebView  {
                 if (listener != null) {
                     if (url.contains("status=success")) {
                         listener.onPending(url);
+                        state = OPGSTATE.SUCCESS;
                     }
                 }
             }
@@ -94,6 +111,7 @@ public class OPGWebView extends WebView  {
                 if (listener != null) {
                     if (view.getUrl().contains("status=failed")) {
                         listener.onFailed(view.getUrl());
+                        state = OPGSTATE.FAILED;
 //                    listener.onError(
 //                            error.getErrorCode(),
 //                            error.getDescription().toString()
@@ -124,5 +142,6 @@ public class OPGWebView extends WebView  {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         listener.onClose();
+        state = OPGSTATE.CLOSE;
     }
 }
