@@ -50,7 +50,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "com.github.anta40"
-                artifactId = "android-opg-sdk"
+                artifactId = "opgsdk"
                 version = "0.0.2"
             }
         }
