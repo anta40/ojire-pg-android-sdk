@@ -57,7 +57,9 @@ public class OPGWebView extends WebView  {
             public void onCloseWindow(WebView window) {
                 super.onCloseWindow(window);
                 if (listener != null){
-                    listener.onClose();
+                    if (window.getUrl().contains("action=close")) {
+                        listener.onClose();
+                    }
                 }
             }
         });
@@ -68,14 +70,18 @@ public class OPGWebView extends WebView  {
                 urlIsChanged = true;
                 currentUrl = url;
                 if (listener != null) {
-                    listener.onPending(url);
+                    if (url.contains("status=pending")) {
+                        listener.onPending(url);
+                    }
                 }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (listener != null) {
-                    listener.onSuccess(url);
+                    if (url.contains("status=success")) {
+                        listener.onPending(url);
+                    }
                 }
             }
 
@@ -86,11 +92,13 @@ public class OPGWebView extends WebView  {
                     WebResourceError error) {
 
                 if (listener != null) {
-                    listener.onFailed(view.getUrl());
+                    if (view.getUrl().contains("status=failed")) {
+                        listener.onFailed(view.getUrl());
 //                    listener.onError(
 //                            error.getErrorCode(),
 //                            error.getDescription().toString()
 //                    );
+                    }
                 }
             }
 
