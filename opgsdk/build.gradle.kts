@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    id("maven-publish") //
 }
 
 android {
@@ -29,6 +30,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
+group = "com.github.anta40"
+version = "1.0.0"
 
 dependencies {
     implementation(libs.appcompat)
