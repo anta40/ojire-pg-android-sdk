@@ -53,23 +53,6 @@ public class OPGWebView extends WebView  {
         this.intentResponse = resp;
     }
 
-    public OPGWebView(Context ctxt){
-        super(ctxt);
-        this.ctxt = ctxt;
-
-        WebSettings webSettings = getSettings();
-        webSettings.setJavaScriptEnabled(true);
-
-    }
-
-    public void setFoo(String newFoo){
-        this.foo = newFoo;
-    }
-
-    public String getFoo(){
-        return this.foo;
-    }
-
     public void setListener(OPGListener listener){
         this.listener = listener;
     }
@@ -87,7 +70,14 @@ public class OPGWebView extends WebView  {
         super(context, attrs);
         init(context, attrs);
 
-        addJavascriptInterface(new WebAppInterface(context), "AndroidInterface");
+
+        WebSettings webSettings = getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);   // ⬅️ WAJIB
+        webSettings.setDatabaseEnabled(true);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
+        //addJavascriptInterface(new WebAppInterface(context), "AndroidInterface");
 
         setWebChromeClient(new WebChromeClient() {
             @Override
@@ -136,10 +126,6 @@ public class OPGWebView extends WebView  {
                     if (view.getUrl().contains("status=failed")) {
                         listener.onFailed(view.getUrl());
                         state = OPGSTATE.FAILED;
-//                    listener.onError(
-//                            error.getErrorCode(),
-//                            error.getDescription().toString()
-//                    );
                     }
                 }
             }
