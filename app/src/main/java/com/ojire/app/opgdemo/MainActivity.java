@@ -113,18 +113,37 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                         System.out.println("Kelar load URL: "+url);
                         String PUBKEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
 
-                        String legacyCode =
-                              "const iframe = document.createElement('iframe');\n" +
-                              "iframe.id = 1324;\n" +
-                              "iframe.url = "+url+";\n" +
-                              "iframe.setAttribute('allow','payment');\n" +
-                              "iframe.setAttribute('allow','clipboard-write');\n" +
-                              "iframe.('load', () => {spinner.classList.add('hidden');});\n"+
-                                      "iframe.onload = () => { iframe.contentWindow?.postMessage({type: \"INIT\", clientSecret, publicKey, token}, url);};\n"
-                                ;
+                        String jsCode = String.format(
+                                "const iframe = document.createElement('iframe');\n" +
+                                        "iframe.id = '%s';\n" +
+                                        "iframe.src = '%s';\n" +
+                                        "iframe.setAttribute('allow', 'payment');\n" +
+                                        "iframe.setAttribute('allow', 'clipboard-write');\n" +
+                                        "iframe.addEventListener('load', () => {\n" +
+                                        "    spinner.classList.add('hidden');\n" +
+                                        "});\n" +
+                                        "iframe.onload = () => {\n" +
+                                        "    if (iframe.contentWindow) {\n" +
+                                        "        iframe.contentWindow.postMessage({\n" +
+                                        "            type: 'INIT',\n" +
+                                        "            clientSecret: '%s',\n" +
+                                        "            publicKey: '%s',\n" +
+                                        "            token: '%s'\n" +
+                                        "        }, '%s');\n" +
+                                        "    }\n" +
+                                        "};",
+                                "1357",
+                                "https://pay-dev.ojire.com/pay",
+                                response.clientSecret,
+                                PUBKEY,
+                                response.customerToken,
+                                "https://pay-dev.ojire.com/pay"
+                        );
 
-                        System.out.println("legacyCode: "+legacyCode);
-                        owv.postWebMessage(new WebMessage(jsonData.toString()), Uri.parse("https://pay-dev.ojire.com/pay"));
+                        System.out.println("jsCode: "+jsCode);
+                        owv.postWebMessage(new WebMessage(jsCode), Uri.parse("https://pay-dev.ojire.com/pay"));
+
+
                     }
                 });
                 //owv.loadUrl("https://pay-dev.ojire.com/pay/b89d1b6d-9188-4abb-9510-19dc7683c0be");
