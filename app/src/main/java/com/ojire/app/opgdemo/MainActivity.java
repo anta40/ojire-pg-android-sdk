@@ -7,6 +7,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebMessage;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,17 +45,17 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
 
     @Override
     public void onSuccess(String url) {
-
+        System.out.println("[SUCCESS] "+url);
     }
 
     @Override
     public void onPending(String url) {
-
+        System.out.println("[PENDING] "+url);
     }
 
     @Override
     public void onFailed(String url) {
-
+        System.out.println("[FAILED] "+url);
     }
 
     @Override
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                     jsonData.put("type", "INIT");
                     jsonData.put("clientSecret", response.clientSecret);
                     jsonData.put("token",response.customerToken);
+                    jsonData.put("publicKey","pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6");
                     jsonData.put("paymentId", response.id);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -101,7 +103,28 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
 //                WebSettings settings = owv.getSettings();
 //                settings.setJavaScriptEnabled(true);
                 //owv.loadUrl("https://ojire.technology/");
+                WebSettings settings = owv.getSettings();
+                settings.setJavaScriptEnabled(true);
                 owv.loadUrl("https://pay-dev.ojire.com/pay");
+                owv.setWebViewClient(new WebViewClient(){
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        System.out.println("Kelar load URL: "+url);
+                        String PUBKEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
+
+                        String legacyCode =
+                              "const iframe = document.createElement('iframe');\n" +
+                              "iframe.id = 1324;\n" +
+                              "iframe.url = "+url+";\n" +
+                              "iframe.setAttribute('allow','payment');\n" +
+                              "iframe.setAttribute('allow','clipboard-write');\n"
+                                ;
+
+                        System.out.println("legacyCode: "+legacyCode);
+                        owv.postWebMessage(new WebMessage(jsonData.toString()), Uri.parse("https://pay-dev.ojire.com/pay"));
+                    }
+                });
                 //owv.loadUrl("https://pay-dev.ojire.com/pay/b89d1b6d-9188-4abb-9510-19dc7683c0be");
 //                Set<String> allowedOriginRules = Collections.singleton(webviewUrl);
 //
