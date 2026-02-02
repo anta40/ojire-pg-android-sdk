@@ -118,7 +118,9 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                               "iframe.id = 1324;\n" +
                               "iframe.url = "+url+";\n" +
                               "iframe.setAttribute('allow','payment');\n" +
-                              "iframe.setAttribute('allow','clipboard-write');\n"
+                              "iframe.setAttribute('allow','clipboard-write');\n" +
+                              "iframe.('load', () => {spinner.classList.add('hidden');});\n"+
+                                      "iframe.onload = () => { iframe.contentWindow?.postMessage({type: \"INIT\", clientSecret, publicKey, token}, url);};\n"
                                 ;
 
                         System.out.println("legacyCode: "+legacyCode);
