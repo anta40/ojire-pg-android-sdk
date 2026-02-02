@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OPGAPIClient {
-    private static final String BASE_URL = "https://api.example.com/";
+    private static final String BASE_URL = "https://api-sandbox.ojire.online/";
     private static Retrofit retrofit = null;
     private static String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
 
