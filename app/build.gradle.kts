@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("com.squareup.retrofit2:retrofit:2.12.0")
     api(project(":opgsdk"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

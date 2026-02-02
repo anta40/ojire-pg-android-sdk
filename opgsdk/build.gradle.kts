@@ -33,31 +33,34 @@ android {
     }
 }
 
-group = "com.github.anta40"
-version = "0.0.2"
+//group = "com.github.anta40"
+//version = "0.0.2"
 
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation("com.squareup.retrofit2:retrofit:2.12.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.12.0")
+    implementation("com.google.code.gson:gson:2.13.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            // This line is the most important:
-            afterEvaluate {
-                from(components["release"])
-            }
-
-            groupId = "com.github.anta40"
-            artifactId = "opgsdk"
-            version = "0.0.2"
-        }
-    }
-}
+//publishing {
+//    publications {
+//        register<MavenPublication>("release") {
+//            // This line is the most important:
+//            afterEvaluate {
+//                from(components["release"])
+//            }
+//
+//            groupId = "com.github.anta40"
+//            artifactId = "opgsdk"
+//            version = "0.0.2"
+//        }
+//    }
+//}
 
 //afterEvaluate {
 //    publishing {
