@@ -9,8 +9,9 @@ import com.ojire.sdk.opg.OPGAPIClient;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
 import com.ojire.sdk.opg.User;
-import com.ojire.sdk.opg.UserRepository;
+import com.ojire.sdk.opg.PaymentRepository;
 import com.ojire.sdk.opg.model.PaymenIntent;
+import com.ojire.sdk.opg.model.PaymentIntentResponse;
 import com.ojire.sdk.opg.model.PaymentMetadata;
 
 public class MainActivity extends AppCompatActivity implements OPGListener {
@@ -55,10 +56,10 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
         metadata.order_id = "order_234";
         param.metadata = metadata;
 
-        UserRepository repo = new UserRepository();
-        repo.doGetToken(param, new UserRepository.UserCallback() {
+        PaymentRepository repo = new PaymentRepository();
+        repo.doGetToken(param, new PaymentRepository.PaymentCallback() {
             @Override
-            public void onSuccess(User user) {
+            public void onSuccess(PaymentIntentResponse response) {
 
             }
 
