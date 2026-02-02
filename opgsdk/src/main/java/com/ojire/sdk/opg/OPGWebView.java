@@ -4,16 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.webkit.JavaScriptReplyProxy;
+import androidx.webkit.WebMessageCompat;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
+
+import com.ojire.sdk.opg.model.PaymentIntentResponse;
 
 public class OPGWebView extends WebView  {
 
@@ -31,14 +39,23 @@ public class OPGWebView extends WebView  {
     private boolean urlIsChanged;
     private Context ctxt;
     private OPGSTATE state;
+    private PaymentIntentResponse intentResponse;
 
     public OPGSTATE getState(){
         return state;
     }
 
+    public void setPaymentIntentResponse(PaymentIntentResponse resp){
+        this.intentResponse = resp;
+    }
+
     public OPGWebView(Context ctxt){
         super(ctxt);
         this.ctxt = ctxt;
+
+        WebSettings webSettings = getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
     }
 
     public void setFoo(String newFoo){

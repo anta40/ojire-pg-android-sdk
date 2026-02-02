@@ -14,6 +14,9 @@ import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 import com.ojire.sdk.opg.model.PaymentMetadata;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity implements OPGListener {
 
     OPGWebView owv;
@@ -21,7 +24,10 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        owv = findViewById(R.id.main_web_view);
         setContentView(R.layout.activity_main);
+
+        performGetToken();
     }
 
     @Override
@@ -60,12 +66,26 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
         repo.doGetToken(param, new PaymentRepository.PaymentCallback() {
             @Override
             public void onSuccess(PaymentIntentResponse response) {
+                System.out.println("Payment intent success: "+response.toString());
+//                JSONObject jsonData = new JSONObject();
+//                try {
+//                    jsonData.put("type", "INIT");
+//                    jsonData.put("clientSecret", response.clientSecret);
+//                    jsonData.put("publicKey","");
+//                    jsonData.put("token",response.customerToken);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                String jsonString = jsonData.toString();
+//                String jsCode = "window.postMessage(" + jsonString + ", '*');";
+//                owv.evaluateJavascript(jsCode, null);
 
             }
 
             @Override
             public void onError(String errorMessage) {
-
+                System.out.println("Payment intent error: "+errorMessage);
             }
         });
     }

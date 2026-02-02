@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <com.ojire.sdk.opg.OPGWebView
+        android:id="@+id/main_web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
