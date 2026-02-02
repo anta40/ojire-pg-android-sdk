@@ -9,12 +9,9 @@ import com.ojire.sdk.opg.OPGAPIClient;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
 import com.ojire.sdk.opg.User;
+import com.ojire.sdk.opg.UserRepository;
 import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentMetadata;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements OPGListener {
 
@@ -58,16 +55,15 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
         metadata.order_id = "order_234";
         param.metadata = metadata;
 
-        service.createPaymentIntent(param).enqueue(new Callback<User>() {
+        UserRepository repo = new UserRepository();
+        repo.doGetToken(param, new UserRepository.UserCallback() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful() && response.body() != null){
-                    User user = response.body();
-                }
+            public void onSuccess(User user) {
+
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onError(String errorMessage) {
 
             }
         });
