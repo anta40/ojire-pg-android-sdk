@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.ValueCallback;
+import android.webkit.WebMessage;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -89,9 +91,18 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                     e.printStackTrace();
                 }
 
-                String webviewUrl = "https://pay-dev.ojire.com/pay/" + response.id;
+                //String webviewUrl = "https://pay-dev.ojire.com/pay/" + response.id;
+                String webviewUrl = "https://pay-dev.ojire.com/pay";
                 System.out.println("Payment webview url: "+webviewUrl);
-
+                System.out.println("jsonData: "+jsonData.toString());
+                //owv.loadUrl("https://www.detik.com");
+                //owv.loadUrl(webviewUrl);
+                //owv.postWebMessage(new WebMessage(jsonData.toString()), Uri.EMPTY);
+//                WebSettings settings = owv.getSettings();
+//                settings.setJavaScriptEnabled(true);
+                //owv.loadUrl("https://ojire.technology/");
+                owv.loadUrl("https://pay-dev.ojire.com/pay");
+                //owv.loadUrl("https://pay-dev.ojire.com/pay/b89d1b6d-9188-4abb-9510-19dc7683c0be");
 //                Set<String> allowedOriginRules = Collections.singleton(webviewUrl);
 //
 //                WebViewCompat.addWebMessageListener(owv, "nativeBridge", allowedOriginRules,
@@ -117,27 +128,27 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
 //                            }
 //                        });
 
-                String jsonString = jsonData.toString();
-                //String jsCode = "window.postMessage(" + jsonString + ", "+webviewUrl+");";
-                String jsCode = "iframe.contentWindow.postMessage(" + jsonString + ", "+webviewUrl+");";
-                System.out.println("jsCode: "+jsCode);
-
-                if (owv == null){
-                    System.out.println("OPGWebView is null...");
-                }
-                else {
-                    owv.evaluateJavascript(jsCode, new ValueCallback<String>() {
-                        @Override
-                        public void onReceiveValue(String s) {
-                            if (s == null) {
-                                System.out.println("Eval JS result: " + null);
-                            } else {
-                                System.out.println("Eval JS result: " + s);
-                            }
-                        }
-
-                    });
-                }
+//                String jsonString = jsonData.toString();
+//                String jsCode = "window.postMessage(" + jsonString + ", "+webviewUrl+");";
+//                //String jsCode = "iframe.contentWindow.postMessage(" + jsonString + ", "+webviewUrl+");";
+//                System.out.println("jsCode: "+jsCode);
+//
+//                if (owv == null){
+//                    System.out.println("OPGWebView is null...");
+//                }
+//                else {
+//                    owv.evaluateJavascript(jsCode, new ValueCallback<String>() {
+//                        @Override
+//                        public void onReceiveValue(String s) {
+//                            if (s == null) {
+//                                System.out.println("Eval JS result: " + null);
+//                            } else {
+//                                System.out.println("Eval JS result: " + s);
+//                            }
+//                        }
+//
+//                    });
+//                }
 
             }
 
