@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -22,6 +23,9 @@ import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class OPGWebView extends WebView  {
 
@@ -83,6 +87,8 @@ public class OPGWebView extends WebView  {
         super(context, attrs);
         init(context, attrs);
 
+        addJavascriptInterface(new WebAppInterface(context), "AndroidInterface");
+
         setWebChromeClient(new WebChromeClient() {
             @Override
             public void onCloseWindow(WebView window) {
@@ -93,6 +99,7 @@ public class OPGWebView extends WebView  {
                         state = OPGSTATE.CLOSE;
                     }
                 }
+
             }
         });
 
