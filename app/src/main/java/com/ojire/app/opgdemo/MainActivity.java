@@ -1,5 +1,8 @@
 package com.ojire.app.opgdemo;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,10 +22,12 @@ import androidx.webkit.WebViewFeature;
 import com.google.gson.Gson;
 import com.ojire.sdk.opg.OPGAPIService;
 import com.ojire.sdk.opg.OPGAPIClient;
+import com.ojire.sdk.opg.OPGDummyListener;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
 import com.ojire.sdk.opg.User;
 import com.ojire.sdk.opg.PaymentRepository;
+import com.ojire.sdk.opg.model.OPGWebClient;
 import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 import com.ojire.sdk.opg.model.PaymentMetadata;
@@ -33,10 +38,10 @@ import org.json.JSONObject;
 import java.util.Collections;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
-    //OPGWebView owv;
-    WebView owv;
+    OPGWebView owv;
+//    WebView owv;
     private final String PUBKEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
 
     @Override
@@ -44,7 +49,57 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         owv = findViewById(R.id.main_web_view);
-        performGetToken();
+//        owv.setWebViewClient(new OPGWebClient(new OPGDummyListener() {
+//            @Override
+//            public void onSuccess(String newUrl) {
+//                System.out.println("newUrl: "+newUrl+" --> MANTAPPPPPUUUU");
+//            }
+//        }));
+        owv.setWebViewClient(new OPGWebClient(new OPGListener() {
+            @Override
+            public void onSuccess(String url) {
+                System.out.println("HOREEEE SUCCESS");
+            }
+
+            @Override
+            public void onPending(String url) {
+                System.out.println("AAA PENDING");
+            }
+
+            @Override
+            public void onFailed(String url) {
+                System.out.println("AAA FAILED");
+            }
+
+            @Override
+            public void onClose() {
+                System.out.println("AAA CLOSED");
+            }
+        }));
+        owv.loadUrl("https://ojire.technology");
+        //owv.setListener(this);
+//        owv.setWebViewClient(new OPGWebClient(new OPGListener() {
+//            @Override
+//            public void onSuccess(String url) {
+//                System.out.println("--> onSuccess: "+url);
+//            }
+//
+//            @Override
+//            public void onPending(String url) {
+//                System.out.println("--> onPending: "+url);
+//            }
+//
+//            @Override
+//            public void onFailed(String url) {
+//                System.out.println("--> onFailed: "+url);
+//            }
+//
+//            @Override
+//            public void onClose() {
+//                System.out.println("--> onClose");
+//            }
+//        }));
+        //performGetToken();
     }
 
 //    @Override
@@ -83,9 +138,17 @@ public class MainActivity extends AppCompatActivity{
         repo.doGetToken(param, new PaymentRepository.PaymentCallback() {
             @Override
             public void onSuccess(PaymentIntentResponse response) {
-                Toast.makeText(getApplicationContext(), "Payment intent success: "+response.toString(), Toast.LENGTH_SHORT).show();
-                System.out.println("Payment intent success: "+response.toString());
-                System.out.println("Token: "+response.customerToken);
+                Toast.makeText(getApplicationContext(), "Payment ID: "+response.id, Toast.LENGTH_SHORT).show();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                System.out.println("Payment ID: "+response.id);
+                ClipData clip = ClipData.newPlainText("CopiedText", response.id);
+
+                if (clipboard != null) {
+                    clipboard.setPrimaryClip(clip);
+
+                    Toast.makeText(MainActivity.this, "Payment ID is copied to clipboard!", Toast.LENGTH_SHORT).show();
+                }
+
                 JSONObject jsonData = new JSONObject();
                 try {
                     jsonData.put("type", "INIT");
@@ -107,12 +170,12 @@ public class MainActivity extends AppCompatActivity{
 //                WebSettings settings = owv.getSettings();
 //                settings.setJavaScriptEnabled(true);
                 //owv.loadUrl("https://ojire.technology/");
-                WebSettings settings = owv.getSettings();
-                settings.setJavaScriptEnabled(true);
-                settings.setDomStorageEnabled(true);   // ⬅️ WAJIB
-                settings.setDatabaseEnabled(true);
-                settings.setAllowFileAccess(true);
-                settings.setAllowContentAccess(true);
+//                WebSettings settings = owv.getSettings();
+//                settings.setJavaScriptEnabled(true);
+//                settings.setDomStorageEnabled(true);   // ⬅️ WAJIB
+//                settings.setDatabaseEnabled(true);
+//                settings.setAllowFileAccess(true);
+//                settings.setAllowContentAccess(true);
                 owv.loadUrl(paymentUrl);
                 //owv.loadUrl("https://ojire.technology");
                 owv.setWebViewClient(new WebViewClient(){
@@ -177,20 +240,19 @@ public class MainActivity extends AppCompatActivity{
                                             payload.toString() +
                                             ", '*'); true;";
 
-//
-//                            boolean canPostWebMessage =
-//                                    WebViewFeature.isFeatureSupported(WebViewFeature.POST_WEB_MESSAGE) ||
-//                                            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_PORT_POST_MESSAGE) ||
-//                                            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER);
-//
-//                            System.out.println("canPostWebMessage: "+canPostWebMessage);
+
+                            boolean canPostWebMessage =
+                                    WebViewFeature.isFeatureSupported(WebViewFeature.POST_WEB_MESSAGE) ||
+                                            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_PORT_POST_MESSAGE) ||
+                                            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER);
+
+                            System.out.println("canPostWebMessage: "+canPostWebMessage);
 //                            if (canPostWebMessage){
-//                                WebMessageCompat msg = new WebMessageCompat(jsCode);
-//                                WebViewCompat.postWebMessage(owv, msg, Uri.parse("https://pay-dev.ojire.com/"));
+//                                WebMessageCompat msg = new WebMessageCompat(js1);
 //                                WebViewCompat.postWebMessage(owv, msg, Uri.parse("*"));
 //                            }
 //                            else {
-//                                owv.evaluateJavascript(jsCode, null);
+//                                owv.evaluateJavascript(js1, null);
 //                            }
 
 //                            InitData ddd = new InitData(response.clientSecret, PUBKEY, response.customerToken);

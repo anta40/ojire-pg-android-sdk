@@ -38,7 +38,7 @@ public class OPGWebView extends WebView  {
     }
 
     private String foo;
-    private OPGListener listener;
+    //private OPGListener listener;
     private String currentUrl;
     private boolean urlIsChanged;
     private Context ctxt;
@@ -53,18 +53,15 @@ public class OPGWebView extends WebView  {
         this.intentResponse = resp;
     }
 
-    public void setListener(OPGListener listener){
-        this.listener = listener;
-    }
 
-    @JavascriptInterface
-    public void closeWebView() {
-        ((Activity)ctxt).finish();
-        if (listener != null){
-            listener.onClose();
-            this.state = OPGSTATE.CLOSE;
-        }
-    }
+//    @JavascriptInterface
+//    public void closeWebView() {
+//        ((Activity)ctxt).finish();
+//        if (listener != null){
+//            listener.onClose();
+//            this.state = OPGSTATE.CLOSE;
+//        }
+//    }
 
     public OPGWebView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -73,64 +70,66 @@ public class OPGWebView extends WebView  {
 
         WebSettings webSettings = getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);   // ⬅️ WAJIB
+        webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
         //addJavascriptInterface(new WebAppInterface(context), "AndroidInterface");
 
-        setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onCloseWindow(WebView window) {
-                super.onCloseWindow(window);
-                if (listener != null){
-                    if (window.getUrl().contains("action=close")) {
-                        listener.onClose();
-                        state = OPGSTATE.CLOSE;
-                    }
-                }
+//        setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public void onCloseWindow(WebView window) {
+//                super.onCloseWindow(window);
+//                if (listener != null){
+//                    if (window.getUrl().contains("action=close")) {
+//                        listener.onClose();
+//                        state = OPGSTATE.CLOSE;
+//                    }
+//                }
+//
+//            }
+//        });
 
-            }
-        });
-
-        setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                urlIsChanged = true;
-                currentUrl = url;
-                if (listener != null) {
-                    if (url.contains("status=pending")) {
-                        listener.onPending(url);
-                        state = OPGSTATE.PENDING;
-                    }
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                if (listener != null) {
-                    if (url.contains("status=success")) {
-                        listener.onPending(url);
-                        state = OPGSTATE.SUCCESS;
-                    }
-                }
-            }
-
-            @Override
-            public void onReceivedError(
-                    WebView view,
-                    WebResourceRequest request,
-                    WebResourceError error) {
-
-                if (listener != null) {
-                    if (view.getUrl().contains("status=failed")) {
-                        listener.onFailed(view.getUrl());
-                        state = OPGSTATE.FAILED;
-                    }
-                }
-            }
-
-        });
+//        setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                urlIsChanged = true;
+//                currentUrl = url;
+//                System.out.println("onPageStarted url: "+url);
+//                if (listener != null) {
+//                    if (url.contains("status=pending")) {
+//                        listener.onPending(url);
+//                        state = OPGSTATE.PENDING;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                if (listener != null) {
+//                    System.out.println("onPageFinished URL: "+url);
+//                    if (url.contains("status=succeeded")) {
+//                        listener.onSuccess(url);
+//                        state = OPGSTATE.SUCCESS;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onReceivedError(
+//                    WebView view,
+//                    WebResourceRequest request,
+//                    WebResourceError error) {
+//
+//                if (listener != null) {
+//                    if (view.getUrl().contains("status=failed")) {
+//                        listener.onFailed(view.getUrl());
+//                        state = OPGSTATE.FAILED;
+//                    }
+//                }
+//            }
+//
+//        });
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -148,10 +147,10 @@ public class OPGWebView extends WebView  {
         }
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        listener.onClose();
-        state = OPGSTATE.CLOSE;
-    }
+//    @Override
+//    protected void onDetachedFromWindow() {
+//        super.onDetachedFromWindow();
+//        listener.onClose();
+//        state = OPGSTATE.CLOSE;
+//    }
 }
