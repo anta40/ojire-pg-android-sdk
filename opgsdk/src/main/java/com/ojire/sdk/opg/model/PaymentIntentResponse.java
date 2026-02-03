@@ -6,22 +6,22 @@ public class PaymentIntentResponse {
     @SerializedName("amount")
     public int amount;
 
-    @SerializedName("client_secret")
+    @SerializedName("clientSecret")
     public String clientSecret;
 
-    @SerializedName("created_at")
+    @SerializedName("createdAt")
     public String createdAt;
 
     @SerializedName("currency")
     public String currency;
 
-    @SerializedName("customer_token")
+    @SerializedName("customerToken")
     public String customerToken;
 
     @SerializedName("id")
     public String id;
 
-    @SerializedName("merchant_id")
+    @SerializedName("merchantId")
     public String merchantId;
 
     @SerializedName("metadata")

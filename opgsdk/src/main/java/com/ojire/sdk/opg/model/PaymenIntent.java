@@ -7,9 +7,9 @@ public class PaymenIntent {
     public int amount;
     @SerializedName("currency")
     public String currency;
-    @SerializedName("merchant_id")
+    @SerializedName("merchantId")
     public String merchantId;
-    @SerializedName("customer_id")
+    @SerializedName("customerId")
     public String customerId;
 
     @SerializedName("description")
