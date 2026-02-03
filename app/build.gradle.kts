@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("com.squareup.retrofit2:retrofit:2.12.0")
     implementation("androidx.webkit:webkit:1.15.0")
+    implementation("com.google.code.gson:gson:2.13.2")
     api(project(":opgsdk"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

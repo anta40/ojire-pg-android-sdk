@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.webkit.JavaScriptReplyProxy;
 import androidx.webkit.WebMessageCompat;
 import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
 
+import com.google.gson.Gson;
 import com.ojire.sdk.opg.OPGAPIService;
 import com.ojire.sdk.opg.OPGAPIClient;
 import com.ojire.sdk.opg.OPGListener;
@@ -31,9 +33,11 @@ import org.json.JSONObject;
 import java.util.Collections;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements OPGListener {
+public class MainActivity extends AppCompatActivity{
 
-    OPGWebView owv;
+    //OPGWebView owv;
+    WebView owv;
+    private final String PUBKEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,25 +47,25 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
         performGetToken();
     }
 
-    @Override
-    public void onSuccess(String url) {
-        System.out.println("[SUCCESS] "+url);
-    }
-
-    @Override
-    public void onPending(String url) {
-        System.out.println("[PENDING] "+url);
-    }
-
-    @Override
-    public void onFailed(String url) {
-        System.out.println("[FAILED] "+url);
-    }
-
-    @Override
-    public void onClose() {
-
-    }
+//    @Override
+//    public void onSuccess(String url) {
+//        System.out.println("[SUCCESS] "+url);
+//    }
+//
+//    @Override
+//    public void onPending(String url) {
+//        System.out.println("[PENDING] "+url);
+//    }
+//
+//    @Override
+//    public void onFailed(String url) {
+//        System.out.println("[FAILED] "+url);
+//    }
+//
+//    @Override
+//    public void onClose() {
+//
+//    }
 
     public void performGetToken(){
         OPGAPIService service = OPGAPIClient.getAPIServicet();
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
         param.description = "Test payment 234";
         param.merchantId = "949f9617-1333-4626-b29b-a049b45aa568";
         PaymentMetadata metadata = new PaymentMetadata();
-        metadata.order_id = "order_234";
+        metadata.orderId = "order_234";
         param.metadata = metadata;
 
         PaymentRepository repo = new PaymentRepository();
@@ -93,9 +97,9 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                     e.printStackTrace();
                 }
 
-                //String webviewUrl = "https://pay-dev.ojire.com/pay/" + response.id;
-                String webviewUrl = "https://pay-dev.ojire.com/pay";
-                System.out.println("Payment webview url: "+webviewUrl);
+                String paymentUrl = "https://pay-dev.ojire.com/pay/" + response.id;
+                //String webviewUrl = "https://pay-dev.ojire.com/pay";
+                System.out.println("Payment url: "+paymentUrl);
                 System.out.println("jsonData: "+jsonData.toString());
                 //owv.loadUrl("https://www.detik.com");
                 //owv.loadUrl(webviewUrl);
@@ -105,13 +109,18 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                 //owv.loadUrl("https://ojire.technology/");
                 WebSettings settings = owv.getSettings();
                 settings.setJavaScriptEnabled(true);
-                owv.loadUrl("https://pay-dev.ojire.com/pay");
+                settings.setDomStorageEnabled(true);   // ⬅️ WAJIB
+                settings.setDatabaseEnabled(true);
+                settings.setAllowFileAccess(true);
+                settings.setAllowContentAccess(true);
+                owv.loadUrl(paymentUrl);
+                //owv.loadUrl("https://ojire.technology");
                 owv.setWebViewClient(new WebViewClient(){
                     @Override
                     public void onPageFinished(WebView view, String url) {
+                        WebBridge bridge = new WebBridge(view);
                         super.onPageFinished(view, url);
                         System.out.println("Kelar load URL: "+url);
-                        String PUBKEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
 
                         String jsCode = String.format(
                                 "const iframe = document.createElement('iframe');\n" +
@@ -140,8 +149,107 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                                 "https://pay-dev.ojire.com/pay"
                         );
 
-                        System.out.println("jsCode: "+jsCode);
-                        owv.postWebMessage(new WebMessage(jsCode), Uri.parse("https://pay-dev.ojire.com/pay"));
+                       // WebViewCompat.postWebMessage(owv, new WebMessageCompat(jsCode), Uri.parse("https://pay-dev.ojire.com"));
+                        //System.out.println("jsCode: "+jsCode);
+                        //owv.postWebMessage(new WebMessage(jsCode), Uri.parse("https://pay-dev.ojire.com/pay"));
+//                        owv.evaluateJavascript(jsCode, new ValueCallback<String>() {
+//                            @Override
+//                            public void onReceiveValue(String s) {
+//                                if (s == null) System.out.println("eval JS: null");
+//                                else System.out.println("eval JS: "+s);
+//                            }
+//                        });
+
+
+                        try {
+                            JSONObject payload = new JSONObject();
+                            payload.put("type", "INIT");
+                            payload.put("clientSecret", response.clientSecret);
+                            payload.put("publicKey", PUBKEY);
+                            payload.put("token", response.customerToken);
+
+                            String js = "window.dispatchEvent(new MessageEvent('message', { data: "
+                                    + JSONObject.quote(payload.toString())
+                                    + " }));";
+
+                            String js1 =
+                                    "window.postMessage(" +
+                                            payload.toString() +
+                                            ", '*'); true;";
+
+//
+//                            boolean canPostWebMessage =
+//                                    WebViewFeature.isFeatureSupported(WebViewFeature.POST_WEB_MESSAGE) ||
+//                                            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_PORT_POST_MESSAGE) ||
+//                                            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER);
+//
+//                            System.out.println("canPostWebMessage: "+canPostWebMessage);
+//                            if (canPostWebMessage){
+//                                WebMessageCompat msg = new WebMessageCompat(jsCode);
+//                                WebViewCompat.postWebMessage(owv, msg, Uri.parse("https://pay-dev.ojire.com/"));
+//                                WebViewCompat.postWebMessage(owv, msg, Uri.parse("*"));
+//                            }
+//                            else {
+//                                owv.evaluateJavascript(jsCode, null);
+//                            }
+
+//                            InitData ddd = new InitData(response.clientSecret, PUBKEY, response.customerToken);
+//                            String jsonString = new Gson().toJson(ddd);
+//                            System.out.println("jsonString: "+jsonString);
+//
+                            owv.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("payload: "+js1);
+                                    owv.evaluateJavascript(js1, new ValueCallback<String>() {
+                                        @Override
+                                        public void onReceiveValue(String s) {
+                                            if (s == null) System.out.println("eval result: null");
+                                            else System.out.println("eval result: "+s);
+                                        }
+                                    });
+                                    owv.evaluateJavascript(js1, null
+                                    );
+                                }
+                            });
+
+
+                            //WebViewCompat.postWebMessage(owv, new WebMessageCompat(payload.toString()), Uri.parse("https://pay-dev.ojire.com"));
+//                            owv.evaluateJavascript(js, null);
+//
+//                            bridge.init();
+//                            bridge.postMessage(jsCode);
+                            //myPostMessage(owv, payload.toString());
+
+                        }
+                        catch (JSONException je){
+                            System.out.println(je.getMessage());
+                        }
+
+
+//
+//
+//                        try {
+//                            JSONObject payload = new JSONObject();
+//                            payload.put("type", "INIT");
+//                            payload.put("clientSecret", response.clientSecret);
+//                            payload.put("publicKey", PUBKEY);
+//                            payload.put("token", response.customerToken);
+//
+////                            String js = "window.dispatchEvent(new MessageEvent('message', { data: "
+////                                    + JSONObject.quote(payload.toString())
+////                                    + " }));";
+//
+//                            String js =
+//                                    "window.postMessage(" +
+//                                            JSONObject.quote(payload.toString()) +
+//                                            ", '*');";
+//
+//                            owv.evaluateJavascript(js, null);
+//                        }
+//                        catch (JSONException je){
+//                            System.out.println(je.getMessage());
+//                        }
 
 
                     }
@@ -202,5 +310,27 @@ public class MainActivity extends AppCompatActivity implements OPGListener {
                 System.out.println("Payment intent error: "+errorMessage);
             }
         });
+    }
+
+    public void myPostMessage(WebView view, String data) {
+        try {
+            JSONObject eventInitDict = new JSONObject();
+            eventInitDict.put("data", data);
+            view.evaluateJavascript(
+                    "(function () {" +
+                            "var event;" +
+                            "var data = " + eventInitDict.toString() + ";" +
+                            "try {" +
+                            "event = new MessageEvent('message', data);" +
+                            "} catch (e) {" +
+                            "event = document.createEvent('MessageEvent');" +
+                            "event.initMessageEvent('message', true, true, data.data, data.origin, data.lastEventId, data.source);" +
+                            "}" +
+                            "document.dispatchEvent(event);" +
+                            "})();",null);
+
+        } catch (JSONException e) {
+            throw  new RuntimeException(e);
+        }
     }
 }
