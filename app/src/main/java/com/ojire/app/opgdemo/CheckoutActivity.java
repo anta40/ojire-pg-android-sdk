@@ -33,7 +33,6 @@ import org.json.JSONObject;
 public class CheckoutActivity extends AppCompatActivity {
 
     OPGWebView webView;
-    //private final String PUBKEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
     String PAYMENT_ID = "";
     private TextView tvPaymentId;
     @Override
@@ -82,10 +81,10 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         }));
 
-        performGetToken();
+        initiatePayment();
     }
 
-    void performGetToken(){
+    void initiatePayment(){
         PaymenIntent param = new PaymenIntent();
         param.amount = 25000;
         param.currency = "IDR";
