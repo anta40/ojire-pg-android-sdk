@@ -64,7 +64,6 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     void performGetToken(){
-        OPGAPIService service = OPGAPIClient.getAPIServicet();
         PaymenIntent param = new PaymenIntent();
         param.amount = 25000;
         param.currency = "IDR";
@@ -75,7 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
         metadata.orderId = "order_234";
         param.metadata = metadata;
 
-        PaymentRepository repo = new PaymentRepository();
+        PaymentRepository repo = new PaymentRepository(CheckoutActivity.this);
         repo.doGetToken(param, new PaymentRepository.PaymentCallback() {
             @Override
             public void onSuccess(PaymentIntentResponse response) {
