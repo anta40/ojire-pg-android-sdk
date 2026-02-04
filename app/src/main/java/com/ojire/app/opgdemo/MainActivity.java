@@ -32,18 +32,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 1. Prepare Dummy Data
         itemList = new ArrayList<>();
-        itemList.add(new CartItem("Sony Alpha a7 IV", "$2,499"));
-        itemList.add(new CartItem("35mm f/1.4 Lens", "$1,299"));
-        itemList.add(new CartItem("Zine Paper Glossy", "$15"));
-        itemList.add(new CartItem("Camera Strap", "$45"));
+        itemList.add(new CartItem("Kaos Sepakbola", "Rp 125.000"));
+        itemList.add(new CartItem("Buku Tulis", "Rp 5.000"));
+        itemList.add(new CartItem("Sepatu ukuran 45", "Rp 100.000"));
+        itemList.add(new CartItem("Jam Tangan", "Rp 830.000"));
 
-        // 2. Setup RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 3. Set Adapter
         adapter = new CartAdapter(itemList);
         recyclerView.setAdapter(adapter);
 
