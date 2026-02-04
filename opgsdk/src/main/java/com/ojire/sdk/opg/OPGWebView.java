@@ -67,7 +67,7 @@ public class OPGWebView extends WebView  {
     public OPGWebView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
-
+        this.ctxt = context;
 
         WebSettings webSettings = getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -78,7 +78,7 @@ public class OPGWebView extends WebView  {
 
     }
 
-    public void initPayment(String pubKey, String clientSecret, String customerToken){
+    public void initPayment(String clientSecret, String customerToken){
        setWebViewClient(new WebViewClient(){
 
            @Override
@@ -89,7 +89,7 @@ public class OPGWebView extends WebView  {
                    JSONObject payload = new JSONObject();
                    payload.put("type", "INIT");
                    payload.put("clientSecret", clientSecret);
-                   payload.put("publicKey", pubKey);
+                   payload.put("publicKey", ctxt.getString(R.string.PUBKEY));
                    payload.put("token", customerToken);
 
                    String jsCode  =

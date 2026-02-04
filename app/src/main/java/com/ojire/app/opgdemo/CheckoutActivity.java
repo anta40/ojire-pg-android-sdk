@@ -28,7 +28,7 @@ import org.json.JSONObject;
 public class CheckoutActivity extends AppCompatActivity {
 
     OPGWebView webView;
-    private final String PUBKEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
+    //private final String PUBKEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
                 String paymentUrl = "https://pay-dev.ojire.com/pay/" + response.id;
                 webView.loadUrl(paymentUrl);
-                webView.initPayment(PUBKEY, response.clientSecret, response.customerToken);
+                webView.initPayment(response.clientSecret, response.customerToken);
             }
 
             @Override
