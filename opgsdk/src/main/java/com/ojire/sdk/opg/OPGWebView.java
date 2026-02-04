@@ -75,62 +75,7 @@ public class OPGWebView extends WebView  {
         webSettings.setDatabaseEnabled(true);
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
-        //addJavascriptInterface(new WebAppInterface(context), "AndroidInterface");
 
-//        setWebChromeClient(new WebChromeClient() {
-//            @Override
-//            public void onCloseWindow(WebView window) {
-//                super.onCloseWindow(window);
-//                if (listener != null){
-//                    if (window.getUrl().contains("action=close")) {
-//                        listener.onClose();
-//                        state = OPGSTATE.CLOSE;
-//                    }
-//                }
-//
-//            }
-//        });
-
-//        setWebViewClient(new WebViewClient() {
-//            @Override
-//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//                urlIsChanged = true;
-//                currentUrl = url;
-//                System.out.println("onPageStarted url: "+url);
-//                if (listener != null) {
-//                    if (url.contains("status=pending")) {
-//                        listener.onPending(url);
-//                        state = OPGSTATE.PENDING;
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                if (listener != null) {
-//                    System.out.println("onPageFinished URL: "+url);
-//                    if (url.contains("status=succeeded")) {
-//                        listener.onSuccess(url);
-//                        state = OPGSTATE.SUCCESS;
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onReceivedError(
-//                    WebView view,
-//                    WebResourceRequest request,
-//                    WebResourceError error) {
-//
-//                if (listener != null) {
-//                    if (view.getUrl().contains("status=failed")) {
-//                        listener.onFailed(view.getUrl());
-//                        state = OPGSTATE.FAILED;
-//                    }
-//                }
-//            }
-//
-//        });
     }
 
     public void initPayment(String pubKey, String clientSecret, String customerToken){

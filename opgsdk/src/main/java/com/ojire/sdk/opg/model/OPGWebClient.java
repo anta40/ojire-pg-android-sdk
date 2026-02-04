@@ -6,7 +6,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.ojire.sdk.opg.OPGDummyListener;
 import com.ojire.sdk.opg.OPGListener;
 
 public class OPGWebClient extends WebViewClient {
