@@ -6,9 +6,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OPGAPIClient {
-    private static final String BASE_URL = "https://api-dev.ojire.online/";
     private static Retrofit retrofit = null;
-    private static String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
+    private static String BASE_URL="https://api-sandbox.ojire.com/";
+    private static String CLIENT_SECRET="sk_177000551040616e1a1317700055104061700600ce2cc82a0e0e";
 
     public static OPGAPIService getAPIServicet() {
         if (retrofit == null) {

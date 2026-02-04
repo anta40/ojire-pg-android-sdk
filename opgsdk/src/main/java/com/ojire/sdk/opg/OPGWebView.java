@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -130,6 +131,46 @@ public class OPGWebView extends WebView  {
 //            }
 //
 //        });
+    }
+
+    public void initPayment(String pubKey, String clientSecret, String customerToken){
+       setWebViewClient(new WebViewClient(){
+
+           @Override
+           public void onPageFinished(WebView view, String url) {
+               super.onPageFinished(view, url);
+
+               try {
+                   JSONObject payload = new JSONObject();
+                   payload.put("type", "INIT");
+                   payload.put("clientSecret", clientSecret);
+                   payload.put("publicKey", pubKey);
+                   payload.put("token", customerToken);
+
+                   String jsCode  =
+                           "window.postMessage(" +
+                                   payload.toString() +
+                                   ", '*'); true;";
+
+                   post(new Runnable() {
+                       @Override
+                       public void run() {
+                           evaluateJavascript(jsCode, new ValueCallback<String>() {
+                               @Override
+                               public void onReceiveValue(String s) {
+                                   if (s == null) System.out.println("eval result: null");
+                                   else System.out.println("eval result: "+s);
+                               }
+                           });
+                       }
+                   });
+
+
+               } catch (JSONException je){
+                   System.out.println(je.getMessage());
+               }
+           }
+       });
     }
 
     private void init(Context context, AttributeSet attrs) {

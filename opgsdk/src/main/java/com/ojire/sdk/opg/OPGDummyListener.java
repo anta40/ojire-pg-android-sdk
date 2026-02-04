@@ -1,4 +1,6 @@
 package com.ojire.sdk.opg;
 
-public class OPGDummyListener {
+public interface OPGDummyListener {
+    //void onUrlChanged(String oldUrl, String newUrl);
+    void onSuccess(String newUrl);
 }

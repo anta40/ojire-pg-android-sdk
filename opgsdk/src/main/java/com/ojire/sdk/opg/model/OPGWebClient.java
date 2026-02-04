@@ -20,8 +20,7 @@ public class OPGWebClient extends WebViewClient {
     private void checkUrl(String newUrl) {
         if (lastUrl == null || !lastUrl.equals(newUrl)) {
             if (listener != null) {
-                //if (newUrl.contains("status=succeeded")){
-                if (newUrl.contains("demo")){
+                if (newUrl.contains("status=succeeded")){
                     listener.onSuccess(newUrl);
                 }
                 else if (newUrl.contains("status=pending")){
