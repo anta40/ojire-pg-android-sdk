@@ -1,9 +1,14 @@
 package com.ojire.app.opgdemo;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,12 +34,29 @@ public class CheckoutActivity extends AppCompatActivity {
 
     OPGWebView webView;
     //private final String PUBKEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
-
+    String PAYMENT_ID = "";
+    private TextView tvPaymentId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+        PAYMENT_ID = getIntent().getStringExtra("PAYMENT_ID");
         webView = findViewById(R.id.main_web_view);
+        tvPaymentId = findViewById(R.id.tvPaymentId);
+
+        tvPaymentId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String textToCopy = tvPaymentId.getText().toString().replace("Payment ID: ","");
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("PaymentId", textToCopy);
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(CheckoutActivity.this,
+                        "Payment ID is copied to clipboard!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         webView.setWebViewClient(new OPGWebClient(new OPGListener() {
             @Override
             public void onSuccess(String url) {
@@ -83,6 +105,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 System.out.println("Token: "+response.customerToken);
                 System.out.println("Client secret: "+response.clientSecret);
 
+                tvPaymentId.setText("Payment ID: "+response.id);
                 String paymentUrl = "https://pay-dev.ojire.com/pay/" + response.id;
                 webView.loadUrl(paymentUrl);
                 webView.initPayment(response.clientSecret, response.customerToken);
