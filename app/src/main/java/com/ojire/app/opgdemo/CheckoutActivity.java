@@ -86,42 +86,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 String paymentUrl = "https://pay-dev.ojire.com/pay/" + response.id;
                 webView.loadUrl(paymentUrl);
                 webView.initPayment(PUBKEY, response.clientSecret, response.customerToken);
-//                webView.setWebViewClient(new WebViewClient(){
-//                    @Override
-//                    public void onPageFinished(WebView view, String url) {
-//                        super.onPageFinished(view, url);
-//
-//                        try {
-//                            JSONObject payload = new JSONObject();
-//                            payload.put("type", "INIT");
-//                            payload.put("clientSecret", response.clientSecret);
-//                            payload.put("publicKey", PUBKEY);
-//                            payload.put("token", response.customerToken);
-//
-//                            String jsCode  =
-//                                    "window.postMessage(" +
-//                                            payload.toString() +
-//                                            ", '*'); true;";
-//
-//                            webView.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    webView.evaluateJavascript(jsCode, new ValueCallback<String>() {
-//                                        @Override
-//                                        public void onReceiveValue(String s) {
-//                                            if (s == null) System.out.println("eval result: null");
-//                                            else System.out.println("eval result: "+s);
-//                                        }
-//                                    });
-//                                }
-//                            });
-//
-//
-//                        } catch (JSONException je){
-//                            System.out.println(je.getMessage());
-//                        }
-//                    }
-//                });
             }
 
             @Override
