@@ -1,0 +1,5 @@
+<resources>
+    <string name="BASE_URL">https://api-sandbox.ojire.com/</string>
+    <string name="CLIENT_SECRET">sk_177000551040616e1a1317700055104061700600ce2cc82a0e0e</string>
+    <string name="PUBKEY">pk_177000551040616e1a131770005510406184b2479ad7758400e1</string>
+</resources>
