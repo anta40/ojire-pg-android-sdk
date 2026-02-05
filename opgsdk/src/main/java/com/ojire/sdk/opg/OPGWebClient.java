@@ -1,4 +1,4 @@
-package com.ojire.sdk.opg.model;
+package com.ojire.sdk.opg;
 
 import android.graphics.Bitmap;
 import android.webkit.WebResourceError;
@@ -6,11 +6,10 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.ojire.sdk.opg.OPGListener;
-
 public class OPGWebClient extends WebViewClient {
     private OPGListener listener;
     private String lastUrl = null;
+
 
     public OPGWebClient(OPGListener listener){
         this.listener = listener;

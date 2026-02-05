@@ -78,9 +78,15 @@ public class OPGWebView extends WebView  {
 
     }
 
-    public void initPayment(String clientSecret, String customerToken){
-       setWebViewClient(new WebViewClient(){
 
+    public void initPayment(String clientSecret, String customerToken){
+//       setWebChromeClient(new WebChromeClient(){
+//           @Override
+//           public void onCloseWindow(WebView window) {
+//               super.onCloseWindow(window);
+//           }
+//       });
+       setWebViewClient(new WebViewClient(){
            @Override
            public void onPageFinished(WebView view, String url) {
                super.onPageFinished(view, url);
@@ -116,6 +122,8 @@ public class OPGWebView extends WebView  {
                }
            }
        });
+
+
     }
 
     private void init(Context context, AttributeSet attrs) {

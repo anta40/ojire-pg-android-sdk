@@ -5,30 +5,18 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.ValueCallback;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.ojire.sdk.opg.OPGAPIClient;
-import com.ojire.sdk.opg.OPGAPIService;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
 import com.ojire.sdk.opg.PaymentRepository;
-import com.ojire.sdk.opg.model.OPGWebClient;
+import com.ojire.sdk.opg.OPGWebClient;
 import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 import com.ojire.sdk.opg.model.PaymentMetadata;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class CheckoutActivity extends AppCompatActivity {
 
