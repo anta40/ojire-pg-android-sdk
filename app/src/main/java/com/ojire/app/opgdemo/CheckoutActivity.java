@@ -16,7 +16,7 @@ import com.ojire.sdk.opg.OPGConfig;
 import com.ojire.sdk.opg.OPGEnvType;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
-import com.ojire.sdk.opg.PaymentRepository;
+import com.ojire.sdk.opg.OPGProcessor;
 import com.ojire.sdk.opg.OPGWebClient;
 import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
@@ -103,8 +103,8 @@ public class CheckoutActivity extends AppCompatActivity {
                 .build();
 
 
-        PaymentRepository repo = new PaymentRepository(CheckoutActivity.this, config);
-        repo.doGetToken(param, new PaymentRepository.PaymentCallback() {
+        OPGProcessor repo = new OPGProcessor(CheckoutActivity.this, config);
+        repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
             @Override
             public void onSuccess(PaymentIntentResponse response) {
                 System.out.println("--- CREATE PAYMENT INTENT RESPONSE ---");

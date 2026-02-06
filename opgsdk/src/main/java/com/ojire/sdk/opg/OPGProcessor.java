@@ -5,12 +5,11 @@ import android.content.Context;
 import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 
-import kotlin.sequences.ConstrainedOnceSequence;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PaymentRepository {
+public class OPGProcessor {
 
     private OPGAPIService apiService;
     private Context ctxt;
@@ -20,7 +19,7 @@ public class PaymentRepository {
         void onError(String errorMessage);
     }
 
-    public PaymentRepository(Context ctxt, OPGConfig config) {
+    public OPGProcessor(Context ctxt, OPGConfig config) {
         this.ctxt = ctxt;
         this.config = config;
 
