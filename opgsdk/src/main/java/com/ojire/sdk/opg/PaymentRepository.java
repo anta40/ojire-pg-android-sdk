@@ -14,16 +14,19 @@ public class PaymentRepository {
 
     private OPGAPIService apiService;
     private Context ctxt;
+    private OPGConfig config;
     public interface PaymentCallback {
         void onSuccess(PaymentIntentResponse user);
         void onError(String errorMessage);
     }
 
-    public PaymentRepository(Context ctxt) {
+    public PaymentRepository(Context ctxt, OPGConfig config) {
         this.ctxt = ctxt;
-        String BASE_URL = ctxt.getString(R.string.BASE_URL);
-        String CLIENT_SECRET = ctxt.getString(R.string.CLIENT_SECRET);
-        this.apiService = OPGAPIClient.getAPIServicet(BASE_URL, CLIENT_SECRET);
+        this.config = config;
+
+        //String BASE_URL = ctxt.getString(R.string.BASE_URL);
+        //String CLIENT_SECRET = ctxt.getString(R.string.CLIENT_SECRET);
+        this.apiService = OPGAPIClient.getAPIService(config.getBaseAPIUrl(), config.getClientSecret());
     }
 
     public void doGetToken(PaymenIntent param,  PaymentCallback callback){

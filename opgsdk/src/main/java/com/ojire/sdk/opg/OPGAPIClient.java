@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OPGAPIClient {
     private static Retrofit retrofit = null;
 
-    public static OPGAPIService getAPIServicet(String BASE_URL, String CLIENT_SECRET) {
+    public static OPGAPIService getAPIService(String BASE_URL, String CLIENT_SECRET) {
         if (retrofit == null) {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {

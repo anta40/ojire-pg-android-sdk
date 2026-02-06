@@ -5,11 +5,15 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ojire.sdk.opg.OPGConfig;
+import com.ojire.sdk.opg.OPGEnvType;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
 import com.ojire.sdk.opg.PaymentRepository;
@@ -23,6 +27,10 @@ public class CheckoutActivity extends AppCompatActivity {
     OPGWebView webView;
     String PAYMENT_ID = "";
     private TextView tvPaymentId;
+
+    private final String CLIENT_SECRET = "sk_177000551040616e1a1317700055104061700600ce2cc82a0e0e";
+    private final String PUBLIC_KEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,12 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onCloseWindow(WebView window) {
+                super.onCloseWindow(window);
+            }
+        });
         webView.setWebViewClient(new OPGWebClient(new OPGListener() {
             @Override
             public void onSuccess(String url) {
@@ -83,7 +97,13 @@ public class CheckoutActivity extends AppCompatActivity {
         metadata.orderId = "order_234";
         param.metadata = metadata;
 
-        PaymentRepository repo = new PaymentRepository(CheckoutActivity.this);
+        OPGConfig config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                .setPublicKey(PUBLIC_KEY)
+                .setEnv(OPGEnvType.OPGEnv.SANDBOX)
+                .build();
+
+
+        PaymentRepository repo = new PaymentRepository(CheckoutActivity.this, config);
         repo.doGetToken(param, new PaymentRepository.PaymentCallback() {
             @Override
             public void onSuccess(PaymentIntentResponse response) {
@@ -93,7 +113,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 System.out.println("Client secret: "+response.clientSecret);
 
                 tvPaymentId.setText("Payment ID: "+response.id);
-                String paymentUrl = "https://pay-dev.ojire.com/pay/" + response.id;
+                String paymentUrl = config.getBasePaymentURL() + response.id;
                 webView.loadUrl(paymentUrl);
                 webView.initPayment(response.clientSecret, response.customerToken);
             }
