@@ -99,7 +99,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         OPGConfig config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
                 .setPublicKey(PUBLIC_KEY)
-                .setEnv(OPGEnvType.OPGEnv.SANDBOX)
+                .setEnv(OPGEnvType.Env.SANDBOX)
                 .build();
 
 

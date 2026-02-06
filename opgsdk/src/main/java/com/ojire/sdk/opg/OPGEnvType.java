@@ -1,7 +1,7 @@
 package com.ojire.sdk.opg;
 
 public class OPGEnvType {
-    public enum OPGEnv {
+    public enum Env {
         DEV,
         SANDBOX,
         PROD

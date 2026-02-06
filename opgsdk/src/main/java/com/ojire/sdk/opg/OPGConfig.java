@@ -49,7 +49,7 @@ public class OPGConfig {
             return this;
         }
 
-        public ConfigBuilder setEnv(OPGEnvType.OPGEnv env) {
+        public ConfigBuilder setEnv(OPGEnvType.Env env) {
             switch (env) {
                 case DEV:
                     this.baseApiUrl = "https://api-dev.ojire.com/";
