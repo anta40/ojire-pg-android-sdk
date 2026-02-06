@@ -12,17 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CartAdapter.OnCartChangedListener {
     private RecyclerView recyclerView;
     private CartAdapter adapter;
     private List<CartItem> itemList;
     private Button btnCheckout;
+    private List<CartItem> cartList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recyclerView = findViewById(R.id.recyclerView);
         btnCheckout = findViewById(R.id.btnCheckout);
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,18 +34,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        itemList = new ArrayList<>();
-        itemList.add(new CartItem("Kaos Sepakbola", "Rp 125.000"));
-        itemList.add(new CartItem("Buku Tulis", "Rp 5.000"));
-        itemList.add(new CartItem("Sepatu ukuran 45", "Rp 100.000"));
-        itemList.add(new CartItem("Jam Tangan", "Rp 830.000"));
+        prepareDummyData();
 
-        recyclerView = findViewById(R.id.recyclerView);
+        adapter = new CartAdapter(cartList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new CartAdapter(itemList);
         recyclerView.setAdapter(adapter);
+
+        //updateTotal();
 
     }
 
+    private void prepareDummyData() {
+        cartList = new ArrayList<>();
+        cartList.add(new CartItem(1, "Smartphone", 699.00, R.drawable.computer));
+        cartList.add(new CartItem(2, "Laptop", 1200.00, R.drawable.computer));
+        cartList.add(new CartItem(3, "Bluetooth Speaker", 45.99, R.drawable.computer));
+    }
+
+    @Override
+    public void onUpdateTotal() {
+        double total = 0;
+        for (CartItem item : cartList) {
+            total += item.getPrice() * item.getQuantity();
+        }
+    }
 }
