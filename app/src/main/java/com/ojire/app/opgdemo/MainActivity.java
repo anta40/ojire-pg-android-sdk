@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
     private List<CartItem> cartList;
     private TextView tvTotal;
     private int TOTAL_CHECKOUT;
+    private int ENV_TYPE;
+    private Spinner spnEnvType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +31,18 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         setContentView(R.layout.activity_main);
 
         TOTAL_CHECKOUT = 0;
+        ENV_TYPE = 0;
 
         recyclerView = findViewById(R.id.recyclerView);
         btnCheckout = findViewById(R.id.btnCheckout);
         tvTotal = findViewById(R.id.tvTotal);
+        spnEnvType = findViewById(R.id.spnEnvType);
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ENV_TYPE = spnEnvType.getSelectedItemPosition();
                 Intent checkoutIntent = new Intent(MainActivity.this, CheckoutActivity.class);
+                checkoutIntent.putExtra("ENV_TYPE", ENV_TYPE);
                 checkoutIntent.putExtra("TOTAL_CHECKOUT", TOTAL_CHECKOUT);
                 startActivity(checkoutIntent);
             }

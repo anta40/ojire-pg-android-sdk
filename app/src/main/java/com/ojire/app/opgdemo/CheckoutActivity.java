@@ -33,6 +33,8 @@ public class CheckoutActivity extends AppCompatActivity {
     private final String CLIENT_SECRET = "sk_177000551040616e1a1317700055104061700600ce2cc82a0e0e";
     private final String PUBLIC_KEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
     private int TOTAL_CHECKOUT;
+    private int ENV_TYPE;
+    private OPGConfig config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class CheckoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_checkout);
         //PAYMENT_ID = getIntent().getStringExtra("PAYMENT_ID");
         TOTAL_CHECKOUT = getIntent().getIntExtra("TOTAL_CHECKOUT", 0);
+        ENV_TYPE = getIntent().getIntExtra("ENV_TYPE", 0);
         webView = findViewById(R.id.main_web_view);
         tvPaymentId = findViewById(R.id.tvPaymentId);
 
@@ -95,18 +98,31 @@ public class CheckoutActivity extends AppCompatActivity {
         int randomNum = ThreadLocalRandom.current().nextInt(10000, 100000);
         param.amount = TOTAL_CHECKOUT;
         param.currency = "IDR";
-        param.customerId = "customer_test_"+randomNum;
+        param.customerId = "customer_"+randomNum;
         param.description = "Test payment "+randomNum;
-        param.merchantId = "949f9617-1333-4626-b29b-a049b45aa568";
+        param.merchantId = getString(R.string.MERCHANT_ID);
         PaymentMetadata metadata = new PaymentMetadata();
         metadata.orderId = "order_"+randomNum;
         param.metadata = metadata;
 
-        OPGConfig config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                .setPublicKey(PUBLIC_KEY)
-                .setEnv(OPGEnvType.Env.SANDBOX)
-                .build();
-
+        if (ENV_TYPE == 0){
+            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                    .setPublicKey(PUBLIC_KEY)
+                    .setEnv(OPGEnvType.Env.DEV)
+                    .build();
+        }
+        else if (ENV_TYPE == 1){
+            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                    .setPublicKey(PUBLIC_KEY)
+                    .setEnv(OPGEnvType.Env.SANDBOX)
+                    .build();
+        }
+        else if (ENV_TYPE == 2){
+            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                    .setPublicKey(PUBLIC_KEY)
+                    .setEnv(OPGEnvType.Env.PROD)
+                    .build();
+        }
 
         OPGProcessor repo = new OPGProcessor(CheckoutActivity.this, config);
         repo.doGetToken(param, new OPGProcessor.PaymentCallback() {

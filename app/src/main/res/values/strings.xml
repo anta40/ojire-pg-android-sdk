@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AndroidOPGDemo</string>
+    <string name="MERCHANT_ID">8b0aa7ad-7036-4c45-9d51-6ba103b396c3</string>
+
+    <string-array name="env_list">
+        <item>DEV</item>
+        <item>SANDBOX</item>
+        <item>PROD</item>
+    </string-array>
+
 </resources>
