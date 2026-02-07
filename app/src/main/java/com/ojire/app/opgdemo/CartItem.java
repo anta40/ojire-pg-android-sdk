@@ -3,11 +3,11 @@ package com.ojire.app.opgdemo;
 public class CartItem {
     private int id;
     private String name;
-    private double price;
+    private int price;
     private int imageRes;
     private int quantity;
 
-    public CartItem(int id, String name, double price, int imageRes) {
+    public CartItem(int id, String name, int price, int imageRes) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -17,7 +17,7 @@ public class CartItem {
 
     // Getters and Setters
     public String getName() { return name; }
-    public double getPrice() { return price; }
+    public int getPrice() { return price; }
     public int getImageRes() { return imageRes; }
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }

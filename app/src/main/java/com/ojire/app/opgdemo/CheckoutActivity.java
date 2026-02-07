@@ -22,20 +22,24 @@ import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 import com.ojire.sdk.opg.model.PaymentMetadata;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class CheckoutActivity extends AppCompatActivity {
 
     OPGWebView webView;
-    String PAYMENT_ID = "";
+    //String PAYMENT_ID = "";
     private TextView tvPaymentId;
 
     private final String CLIENT_SECRET = "sk_177000551040616e1a1317700055104061700600ce2cc82a0e0e";
     private final String PUBLIC_KEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
+    private int TOTAL_CHECKOUT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        PAYMENT_ID = getIntent().getStringExtra("PAYMENT_ID");
+        //PAYMENT_ID = getIntent().getStringExtra("PAYMENT_ID");
+        TOTAL_CHECKOUT = getIntent().getIntExtra("TOTAL_CHECKOUT", 0);
         webView = findViewById(R.id.main_web_view);
         tvPaymentId = findViewById(R.id.tvPaymentId);
 
@@ -88,13 +92,14 @@ public class CheckoutActivity extends AppCompatActivity {
 
     void initiatePayment(){
         PaymenIntent param = new PaymenIntent();
-        param.amount = 25000;
+        int randomNum = ThreadLocalRandom.current().nextInt(10000, 100000);
+        param.amount = TOTAL_CHECKOUT;
         param.currency = "IDR";
-        param.customerId = "customer_test_234";
-        param.description = "Test payment 234";
+        param.customerId = "customer_test_"+randomNum;
+        param.description = "Test payment "+randomNum;
         param.merchantId = "949f9617-1333-4626-b29b-a049b45aa568";
         PaymentMetadata metadata = new PaymentMetadata();
-        metadata.orderId = "order_234";
+        metadata.orderId = "order_"+randomNum;
         param.metadata = metadata;
 
         OPGConfig config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)

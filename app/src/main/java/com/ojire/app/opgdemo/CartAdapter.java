@@ -40,7 +40,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         CartItem item = cartList.get(position);
 
         holder.binding.productName.setText(item.getName());
-        holder.binding.productPrice.setText("$" + String.format("%.2f", item.getPrice()));
+        //holder.binding.productPrice.setText("Rp" + String.format("%.0f", item.getPrice()));
+        holder.binding.productPrice.setText("Rp" + item.getPrice());
         holder.binding.tvQuantity.setText(String.valueOf(item.getQuantity()));
         holder.binding.productImage.setImageResource(item.getImageRes());
 
