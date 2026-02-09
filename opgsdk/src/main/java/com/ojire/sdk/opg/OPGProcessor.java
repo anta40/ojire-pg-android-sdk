@@ -22,9 +22,6 @@ public class OPGProcessor {
     public OPGProcessor(Context ctxt, OPGConfig config) {
         this.ctxt = ctxt;
         this.config = config;
-
-        //String BASE_URL = ctxt.getString(R.string.BASE_URL);
-        //String CLIENT_SECRET = ctxt.getString(R.string.CLIENT_SECRET);
         this.apiService = OPGAPIClient.getAPIService(config.getBaseAPIUrl(), config.getClientSecret());
     }
 
