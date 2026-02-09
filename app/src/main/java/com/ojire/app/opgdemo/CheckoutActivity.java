@@ -59,36 +59,39 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onCloseWindow(WebView window) {
-                super.onCloseWindow(window);
-            }
-        });
-        webView.setWebViewClient(new OPGWebClient(new OPGListener() {
-            @Override
-            public void onSuccess(String url) {
-                Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-            @Override
-            public void onPending(String url) {
-                Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-            @Override
-            public void onFailed(String url) {
-                Toast.makeText(getApplicationContext(), "Pembayaran gagal.", Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-            @Override
-            public void onClose() {
-
-            }
-        }));
+//        webView.setWebChromeClient(new WebChromeClient(){
+//            @Override
+//            public void onCloseWindow(WebView window) {
+//                super.onCloseWindow(window);
+//            }
+//        });
+//        webView.setWebViewClient(new OPGWebClient(new OPGListener() {
+//            @Override
+//            public void onSuccess(String url) {
+//                System.out.println("BLAH: "+url);
+//                Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onPending(String url) {
+//                System.out.println("BLAH: "+url);
+//                Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onFailed(String url) {
+//                System.out.println("BLAH: "+url);
+//                Toast.makeText(getApplicationContext(), "Pembayaran gagal.", Toast.LENGTH_LONG).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onClose() {
+//
+//            }
+//        }));
 
         initiatePayment();
     }
@@ -106,7 +109,7 @@ public class CheckoutActivity extends AppCompatActivity {
         param.metadata = metadata;
 
         if (ENV_TYPE == 0){
-            config = new OPGConfig.ConfigBuilder().setClientSecret("sk_1769591280469729bd24176959128046989e6f78b694f70b4131")
+            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
                     .setPublicKey(PUBLIC_KEY)
                     .setEnv(OPGEnvType.Env.DEV)
                     .build();
@@ -135,8 +138,43 @@ public class CheckoutActivity extends AppCompatActivity {
 
                 tvPaymentId.setText("Payment ID: "+response.id);
                 String paymentUrl = config.getBasePaymentURL() + response.id;
+                System.out.println("PaymentUrl: "+paymentUrl);
+
+                webView.setWebChromeClient(new WebChromeClient(){
+                    @Override
+                    public void onCloseWindow(WebView window) {
+                        super.onCloseWindow(window);
+                    }
+                });
+                webView.setWebViewClient(new OPGWebClient(new OPGListener() {
+                    @Override
+                    public void onSuccess(String url) {
+                        System.out.println("BLAH: "+url);
+                        Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onPending(String url) {
+                        System.out.println("BLAH: "+url);
+                        Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailed(String url) {
+                        System.out.println("BLAH: "+url);
+                        Toast.makeText(getApplicationContext(), "Pembayaran gagal.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onClose() {
+
+                    }
+                }));
                 webView.loadUrl(paymentUrl);
-                webView.initPayment(PUBLIC_KEY,CLIENT_SECRET, response.customerToken);
+                webView.initPayment(PUBLIC_KEY, response.clientSecret, response.customerToken);
             }
 
             @Override

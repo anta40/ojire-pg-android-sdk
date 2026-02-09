@@ -12,6 +12,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,6 +28,8 @@ import com.ojire.sdk.opg.model.PaymentIntentResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 public class OPGWebView extends WebView  {
 
@@ -121,9 +124,39 @@ public class OPGWebView extends WebView  {
                    System.out.println(je.getMessage());
                }
            }
+
+           @Nullable
+           @Override
+           public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+               String url = request.getUrl().toString();
+               String curlCmd = buildCurlLog(request);
+               System.out.println("Curl CMD: "+curlCmd);
+               return super.shouldInterceptRequest(view, request);
+           }
        });
 
 
+    }
+
+    private String buildCurlLog(WebResourceRequest request) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("curl");
+
+        // Add the Method
+        builder.append(" -X ").append(request.getMethod());
+
+        // Add the Headers
+        Map<String, String> headers = request.getRequestHeaders();
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            // Escape double quotes in header values to prevent breaking the command
+            String escapedValue = entry.getValue().replace("\"", "\\\"");
+            builder.append(String.format(" -H \"%s: %s\"", entry.getKey(), escapedValue));
+        }
+
+        // Add the URL
+        builder.append(" \"").append(request.getUrl().toString()).append("\"");
+
+        return builder.toString();
     }
 
     private void init(Context context, AttributeSet attrs) {
