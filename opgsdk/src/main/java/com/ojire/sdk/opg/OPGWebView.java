@@ -42,7 +42,7 @@ public class OPGWebView extends WebView  {
     }
 
     private String foo;
-    //private OPGListener listener;
+    private OPGListener listener;
     private String currentUrl;
     private boolean urlIsChanged;
     private Context ctxt;
@@ -67,6 +67,10 @@ public class OPGWebView extends WebView  {
 //        }
 //    }
 
+    public void setListener(OPGListener listener){
+        this.listener = listener;
+    }
+
     public OPGWebView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
@@ -83,71 +87,57 @@ public class OPGWebView extends WebView  {
 
 
     public void initPayment(String pubKey, String clientSecret, String customerToken){
-//       setWebChromeClient(new WebChromeClient(){
-//           @Override
-//           public void onCloseWindow(WebView window) {
-//               super.onCloseWindow(window);
-//           }
-//       });
+
        setWebViewClient(new WebViewClient(){
            @Override
            public void onPageFinished(WebView view, String url) {
                super.onPageFinished(view, url);
 
-               try {
-                   JSONObject payload = new JSONObject();
-                   payload.put("type", "INIT");
-                   payload.put("clientSecret", clientSecret);
-                   payload.put("publicKey", pubKey);
-                   payload.put("token", customerToken);
+               System.out.println("OPGWebView::onPageFinished URL: "+url);
+               if (url.contains("status=succeeded")){
+                    listener.onSuccess(url);
+               }
+               else if (url.contains("status=failed")){
+                   listener.onFailed(url);
+               }
+               else if (url.contains("status=pending")){
+                   listener.onPending(url);
+               }
+               else {
+                   try {
+                       JSONObject payload = new JSONObject();
+                       payload.put("type", "INIT");
+                       payload.put("clientSecret", clientSecret);
+                       payload.put("publicKey", pubKey);
+                       payload.put("token", customerToken);
 
-                   String jsCode  =
-                           "window.postMessage(" +
-                                   payload.toString() +
-                                   ", '*'); true;";
+                       String jsCode =
+                               "window.postMessage(" +
+                                       payload.toString() +
+                                       ", '*'); true;";
 
-                   post(new Runnable() {
-                       @Override
-                       public void run() {
-                           evaluateJavascript(jsCode, new ValueCallback<String>() {
-                               @Override
-                               public void onReceiveValue(String s) {
-                                   if (s == null) System.out.println("eval result: null");
-                                   else System.out.println("eval result: "+s);
-                               }
-                           });
-                       }
-                   });
+                       post(new Runnable() {
+                           @Override
+                           public void run() {
+                               evaluateJavascript(jsCode, new ValueCallback<String>() {
+                                   @Override
+                                   public void onReceiveValue(String s) {
+                                       if (s == null) System.out.println("eval result: null");
+                                       else System.out.println("eval result: " + s);
+                                   }
+                               });
+                           }
+                       });
 
 
-               } catch (JSONException je){
-                   System.out.println(je.getMessage());
+                   } catch (JSONException je) {
+                       System.out.println(je.getMessage());
+                   }
                }
            }
 
        });
 
-    }
-
-    private String buildCurlLog(WebResourceRequest request) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("curl");
-
-        // Add the Method
-        builder.append(" -X ").append(request.getMethod());
-
-        // Add the Headers
-        Map<String, String> headers = request.getRequestHeaders();
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            // Escape double quotes in header values to prevent breaking the command
-            String escapedValue = entry.getValue().replace("\"", "\\\"");
-            builder.append(String.format(" -H \"%s: %s\"", entry.getKey(), escapedValue));
-        }
-
-        // Add the URL
-        builder.append(" \"").append(request.getUrl().toString()).append("\"");
-
-        return builder.toString();
     }
 
     private void init(Context context, AttributeSet attrs) {
