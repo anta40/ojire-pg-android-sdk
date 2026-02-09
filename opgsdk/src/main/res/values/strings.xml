@@ -1,4 +1,3 @@
 <resources>
     <string name="BASE_URL">https://api-sandbox.ojire.com/</string>
-    <string name="PUBKEY_DEV">pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6</string>
 </resources>
