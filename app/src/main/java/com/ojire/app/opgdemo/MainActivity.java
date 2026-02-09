@@ -1,5 +1,7 @@
 package com.ojire.app.opgdemo;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +9,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +29,18 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
     private int TOTAL_CHECKOUT;
     private int ENV_TYPE;
     private Spinner spnEnvType;
+
+    private final ActivityResultLauncher<Intent> startForResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        String payment_msg = data.getStringExtra("payment_msg");
+                        showAlert(payment_msg);
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 Intent checkoutIntent = new Intent(MainActivity.this, CheckoutActivity.class);
                 checkoutIntent.putExtra("ENV_TYPE", ENV_TYPE);
                 checkoutIntent.putExtra("TOTAL_CHECKOUT", TOTAL_CHECKOUT);
-                startActivity(checkoutIntent);
+                //startActivity(checkoutIntent);
+                startForResult.launch(checkoutIntent);
             }
         });
 
@@ -74,5 +92,21 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         }
         TOTAL_CHECKOUT = total;
         tvTotal.setText("Total: Rp"+total);
+    }
+
+    public void showAlert(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Android OPG Demo")
+                .setMessage(message)
+                .setCancelable(false) // Prevents closing if user clicks outside the dialog
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

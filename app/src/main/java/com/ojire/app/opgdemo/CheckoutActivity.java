@@ -1,9 +1,11 @@
 package com.ojire.app.opgdemo;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -122,8 +124,11 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra("payment_msg", "Pembayaran berhasil!");
+                                    setResult(Activity.RESULT_OK, returnIntent);
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
                                 }
                             }, 5000);
     }
@@ -133,8 +138,11 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("payment_msg", "Pembayaran pending...");
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
-               Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
             }
         }, 5000);
     }
@@ -144,8 +152,11 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("payment_msg", "Pembayaran gagal :(");
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
-                Toast.makeText(getApplicationContext(), "Pembayaran gagal", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Pembayaran gagal", Toast.LENGTH_LONG).show();
             }
         }, 5000);
     }
@@ -155,7 +166,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 
     }
 
-    public void showAlert(String message){
+    public void showAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Android OPG Demo")
