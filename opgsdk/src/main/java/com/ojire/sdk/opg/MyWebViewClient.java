@@ -12,9 +12,35 @@ public class MyWebViewClient extends WebViewClient {
     // Fires BEFORE navigation happens (best place to intercept)
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        String url = request.getUrl().toString();
-        handleUrlChange(url);
+        System.out.println("Masuk");
+        String urlString = request.getUrl().toString();
+        handleUrlChange(urlString);
 
+        System.out.println("handleUrlChange: "+urlString);
+
+        if (urlString.contains("status=succeeded")) {
+            //onSuccess(url);
+            System.out.println("OK sukses");
+            return true; // Equivalent to .cancel
+        }
+
+        if (urlString.contains("status=pending")) {
+            //onPending(url);
+            System.out.println("OK pending");
+            return true; // Equivalent to .cancel
+        }
+
+        if (urlString.contains("status=failed")) {
+            //onFailed(url);
+            System.out.println("OK failed");
+            return true; // Equivalent to .cancel
+        }
+
+        if (urlString.contains("action=close")) {
+            //onClose();
+            System.out.println("OK close");
+            return true; // Equivalent to .cancel
+        }
         // return true if you want to block navigation
         return false;
     }
