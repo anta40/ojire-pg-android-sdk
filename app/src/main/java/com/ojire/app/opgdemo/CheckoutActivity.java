@@ -123,7 +123,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
                                 @Override
                                 public void run() {
                                     finish();
-                                    showAlert("Pembayaran berhasil.");
+                                    Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
                                 }
                             }, 5000);
     }
@@ -134,7 +134,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
             @Override
             public void run() {
                 finish();
-                showAlert("Pembayaran pending.");
+               Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
             }
         }, 5000);
     }
@@ -145,7 +145,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
             @Override
             public void run() {
                 finish();
-                showAlert("Pembayaran gagal.");
+                Toast.makeText(getApplicationContext(), "Pembayaran gagal", Toast.LENGTH_LONG).show();
             }
         }, 5000);
     }
