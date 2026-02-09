@@ -30,8 +30,8 @@ public class CheckoutActivity extends AppCompatActivity {
     //String PAYMENT_ID = "";
     private TextView tvPaymentId;
 
-    private final String CLIENT_SECRET = "sk_177000551040616e1a1317700055104061700600ce2cc82a0e0e";
-    private final String PUBLIC_KEY = "pk_177000551040616e1a131770005510406184b2479ad7758400e1";
+    private final String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
+    private final String PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
     private int TOTAL_CHECKOUT;
     private int ENV_TYPE;
     private OPGConfig config;
@@ -106,7 +106,7 @@ public class CheckoutActivity extends AppCompatActivity {
         param.metadata = metadata;
 
         if (ENV_TYPE == 0){
-            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
+            config = new OPGConfig.ConfigBuilder().setClientSecret("sk_1769591280469729bd24176959128046989e6f78b694f70b4131")
                     .setPublicKey(PUBLIC_KEY)
                     .setEnv(OPGEnvType.Env.DEV)
                     .build();
@@ -136,7 +136,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 tvPaymentId.setText("Payment ID: "+response.id);
                 String paymentUrl = config.getBasePaymentURL() + response.id;
                 webView.loadUrl(paymentUrl);
-                webView.initPayment(response.clientSecret, response.customerToken);
+                webView.initPayment(PUBLIC_KEY,CLIENT_SECRET, response.customerToken);
             }
 
             @Override

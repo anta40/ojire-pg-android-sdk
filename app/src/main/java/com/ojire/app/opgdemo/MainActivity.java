@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TOTAL_CHECKOUT = 0;
+        TOTAL_CHECKOUT = 20500;
         ENV_TYPE = 0;
 
         recyclerView = findViewById(R.id.recyclerView);

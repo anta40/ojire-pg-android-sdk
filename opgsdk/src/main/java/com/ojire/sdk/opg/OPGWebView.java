@@ -79,7 +79,7 @@ public class OPGWebView extends WebView  {
     }
 
 
-    public void initPayment(String clientSecret, String customerToken){
+    public void initPayment(String pubKey, String clientSecret, String customerToken){
 //       setWebChromeClient(new WebChromeClient(){
 //           @Override
 //           public void onCloseWindow(WebView window) {
@@ -95,7 +95,7 @@ public class OPGWebView extends WebView  {
                    JSONObject payload = new JSONObject();
                    payload.put("type", "INIT");
                    payload.put("clientSecret", clientSecret);
-                   payload.put("publicKey", ctxt.getString(R.string.PUBKEY));
+                   payload.put("publicKey", pubKey);
                    payload.put("token", customerToken);
 
                    String jsCode  =
