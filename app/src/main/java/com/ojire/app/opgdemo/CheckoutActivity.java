@@ -12,12 +12,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ojire.sdk.opg.MyJSInterface;
+import com.ojire.sdk.opg.MyWebClient;
+import com.ojire.sdk.opg.MyWebViewClient;
 import com.ojire.sdk.opg.OPGConfig;
 import com.ojire.sdk.opg.OPGEnvType;
 import com.ojire.sdk.opg.OPGListener;
 import com.ojire.sdk.opg.OPGWebView;
 import com.ojire.sdk.opg.OPGProcessor;
 import com.ojire.sdk.opg.OPGWebClient;
+import com.ojire.sdk.opg.UrlChangeListener;
 import com.ojire.sdk.opg.model.PaymenIntent;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 import com.ojire.sdk.opg.model.PaymentMetadata;
@@ -140,12 +144,31 @@ public class CheckoutActivity extends AppCompatActivity {
                 String paymentUrl = config.getBasePaymentURL() + response.id;
                 System.out.println("PaymentUrl: "+paymentUrl);
 
-                webView.setWebChromeClient(new WebChromeClient(){
-                    @Override
-                    public void onCloseWindow(WebView window) {
-                        super.onCloseWindow(window);
-                    }
-                });
+//                webView.setWebChromeClient(new WebChromeClient(){
+//                    @Override
+//                    public void onCloseWindow(WebView window) {
+//                        super.onCloseWindow(window);
+//                    }
+//                });
+//
+//                webView.setWebViewClient(new MyWebClient(new UrlChangeListener() {
+//                    @Override
+//                    public void onUrlChanged(String oldUrl, String newUrl) {
+//                        System.out.println("URL changed from "+oldUrl+" to "+newUrl);
+//                    }
+//                }));
+
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.getSettings().setDomStorageEnabled(true);
+               // webView.addJavascriptInterface(new MyJSInterface(new MyWebViewClient(), webView), "AndroidBridge");
+                //webView.setWebViewClient(new MyWebViewClient());
+
+//                webView.addJavascriptInterface(new MyJSInterface(newUrl -> {
+//                    runOnUiThread(() -> {
+//                        System.out.println("URL detected via postMessage: " + newUrl);
+//                        // Handle your logic here
+//                    });
+//                }), "Android");
                 webView.setWebViewClient(new OPGWebClient(new OPGListener() {
                     @Override
                     public void onSuccess(String url) {

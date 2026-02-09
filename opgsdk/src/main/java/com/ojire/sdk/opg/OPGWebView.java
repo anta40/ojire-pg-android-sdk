@@ -125,16 +125,7 @@ public class OPGWebView extends WebView  {
                }
            }
 
-           @Nullable
-           @Override
-           public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-               String url = request.getUrl().toString();
-               String curlCmd = buildCurlLog(request);
-               System.out.println("Curl CMD: "+curlCmd);
-               return super.shouldInterceptRequest(view, request);
-           }
        });
-
 
     }
 
