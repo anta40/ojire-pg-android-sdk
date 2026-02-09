@@ -15,19 +15,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvPaymentId" />
 
-<!--    <com.ojire.sdk.opg.OPGWebView-->
-<!--        android:layout_below="@id/tvPaymentId"-->
-<!--        android:id="@+id/main_web_view"-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:layout_height="fill_parent"-->
-<!--    />-->
-
-    <WebView
+    <com.ojire.sdk.opg.OPGWebView
         android:layout_below="@id/tvPaymentId"
         android:id="@+id/main_web_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        />
+    />
+
+<!--    <WebView-->
+<!--        android:layout_below="@id/tvPaymentId"-->
+<!--        android:id="@+id/main_web_view"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="fill_parent"-->
+<!--        />-->
 
 
 </RelativeLayout>

@@ -38,8 +38,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CheckoutActivity extends AppCompatActivity {
 
-    //OPGWebView webView;
-    WebView webView;
+    OPGWebView webView;
+//    WebView webView;
     //String PAYMENT_ID = "";
     private TextView tvPaymentId;
 
