@@ -56,24 +56,11 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
         metadata.orderId = "order_"+randomNum;
         param.metadata = metadata;
 
-        if (ENV_TYPE == 0){
-            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
+
+        OPGConfig config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
                     .setPublicKey(PUBLIC_KEY)
                     .setEnv(OPGEnvType.Env.DEV)
                     .build();
-        }
-        else if (ENV_TYPE == 1){
-            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                    .setPublicKey(PUBLIC_KEY)
-                    .setEnv(OPGEnvType.Env.SANDBOX)
-                    .build();
-        }
-        else if (ENV_TYPE == 2){
-            config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                    .setPublicKey(PUBLIC_KEY)
-                    .setEnv(OPGEnvType.Env.PROD)
-                    .build();
-        }
 
         webView.initPayment(PUBLIC_KEY, config, param);
     }
@@ -103,7 +90,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 |-----|-----|---------|-------------|
 | `clientSecret` | `String` | ✅ | Client secret provided from backed|
 | `publicKey` | `String` | ✅ | Merchant's public key |
-| `env` | `OPGEnvType` | ✅  | Environment (`DEV`, `SANDBOX`, or `PROD`) |
+| `env` | `OPGEnvType.Env` | ✅  | Environment (`DEV`, `SANDBOX`, or `PROD`) |
 
 
 ---
