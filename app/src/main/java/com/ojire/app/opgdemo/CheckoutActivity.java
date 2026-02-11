@@ -28,7 +28,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 
     OPGWebView webView;
-//    WebView webView;
     private TextView tvPaymentId;
 
     private final String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";

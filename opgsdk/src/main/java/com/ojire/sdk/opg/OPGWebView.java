@@ -97,7 +97,6 @@ public class OPGWebView extends WebView  {
                 System.out.println("Token: "+response.customerToken);
                 System.out.println("Client secret: "+response.clientSecret);
 
-                //tvPaymentId.setText("Payment ID: "+response.id);
                 String paymentUrl = config.getBasePaymentURL() + response.id;
                 System.out.println("PaymentUrl: "+paymentUrl);
 
