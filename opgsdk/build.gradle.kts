@@ -33,9 +33,6 @@ android {
     }
 }
 
-//group = "com.github.anta40"
-//version = "0.0.2"
-
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -48,30 +45,16 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 }
 
-//publishing {
-//    publications {
-//        register<MavenPublication>("release") {
-//            // This line is the most important:
-//            afterEvaluate {
-//                from(components["release"])
-//            }
-//
-//            groupId = "com.github.anta40"
-//            artifactId = "opgsdk"
-//            version = "0.0.2"
-//        }
-//    }
-//}
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                from(components["release"])
 
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            create<MavenPublication>("release") {
-//                from(components["release"])
-//                groupId = "com.github.anta40"
-//                artifactId = "opgsdk"
-//                version = "0.0.2"
-//            }
-//        }
-//    }
-//}
+                groupId = "com.github.anta40"
+                artifactId = "ojire-pg-android-sdk"
+                version = "0.0.1"
+            }
+        }
+    }
+}
