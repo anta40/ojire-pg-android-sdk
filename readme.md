@@ -15,9 +15,11 @@ dependencyResolutionManagement {
 Then add this line into your app **build.gradle.kts**:
 ```
 dependencies {
-	        implementation("com.github.anta40:ojire-pg-android-sdk:VERSION")
+	        implementation("com.github.anta40:ojire-pg-android-sdk:%VERSION%")
 	}
 ```
+
+Replace `%VERSION%` with the actual version number, e.g `0.2.0` or `0.1.1`, for example.
 ---
 
 ## Basic Usage (Java)
