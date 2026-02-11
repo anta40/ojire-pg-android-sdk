@@ -2,7 +2,7 @@ package com.ojire.sdk.opg;
 
 import android.content.Context;
 
-import com.ojire.sdk.opg.model.PaymenIntent;
+import com.ojire.sdk.opg.model.PaymentIntentParam;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 
 import retrofit2.Call;
@@ -25,7 +25,7 @@ public class OPGProcessor {
         this.apiService = OPGAPIClient.getAPIService(config.getBaseAPIUrl(), config.getClientSecret());
     }
 
-    public void doGetToken(PaymenIntent param,  PaymentCallback callback){
+    public void doGetToken(PaymentIntentParam param, PaymentCallback callback){
 
         apiService.createPaymentIntent(param).enqueue(new Callback<PaymentIntentResponse>() {
             @Override

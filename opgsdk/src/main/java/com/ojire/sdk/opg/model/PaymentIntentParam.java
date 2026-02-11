@@ -2,7 +2,7 @@ package com.ojire.sdk.opg.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PaymenIntent {
+public class PaymentIntentParam {
     @SerializedName("amount")
     public int amount;
     @SerializedName("currency")

@@ -16,6 +16,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import androidx.webkit.WebMessageCompat;
 import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebViewFeature;
 
+import com.ojire.sdk.opg.model.PaymentIntentParam;
 import com.ojire.sdk.opg.model.PaymentIntentResponse;
 
 import org.json.JSONException;
@@ -85,8 +87,34 @@ public class OPGWebView extends WebView  {
 
     }
 
+    public void initPayment(OPGConfig config, PaymentIntentParam param, String publicKey){
+        OPGProcessor repo = new OPGProcessor(ctxt, config);
+        repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
+            @Override
+            public void onSuccess(PaymentIntentResponse response) {
+                System.out.println("--- CREATE PAYMENT INTENT RESPONSE ---");
+                System.out.println("Payment ID: "+response.id);
+                System.out.println("Token: "+response.customerToken);
+                System.out.println("Client secret: "+response.clientSecret);
 
-    public void initPayment(String pubKey, String clientSecret, String customerToken){
+                //tvPaymentId.setText("Payment ID: "+response.id);
+                String paymentUrl = config.getBasePaymentURL() + response.id;
+                System.out.println("PaymentUrl: "+paymentUrl);
+
+                loadUrl(paymentUrl);
+                handlePaymentIntent(publicKey, response.clientSecret, response.customerToken);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                System.out.println("Create payment intent error: "+errorMessage);
+                Toast.makeText(ctxt, "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    private void handlePaymentIntent(String pubKey, String clientSecret, String customerToken){
 
        setWebViewClient(new WebViewClient(){
            @Override

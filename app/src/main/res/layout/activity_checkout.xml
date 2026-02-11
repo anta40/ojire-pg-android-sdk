@@ -7,16 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".CheckoutActivity">
 
-
-    <TextView
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvPaymentId" />
-
     <com.ojire.sdk.opg.OPGWebView
-        android:layout_below="@id/tvPaymentId"
         android:id="@+id/main_web_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
