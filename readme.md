@@ -20,6 +20,7 @@ dependencies {
 ```
 
 Replace `%VERSION%` with the actual version number, e.g `0.2.0` or `0.1.1`, for example.
+
 ---
 
 ## Basic Usage (Java)
