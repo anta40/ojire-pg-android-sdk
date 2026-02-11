@@ -87,7 +87,7 @@ public class OPGWebView extends WebView  {
 
     }
 
-    public void initPayment(OPGConfig config, PaymentIntentParam param, String publicKey){
+    public void initPayment(String publicKey, OPGConfig config, PaymentIntentParam param){
         OPGProcessor repo = new OPGProcessor(ctxt, config);
         repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
             @Override

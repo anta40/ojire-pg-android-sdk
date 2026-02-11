@@ -80,31 +80,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
                     .build();
         }
 
-        webView.initPayment(config,param, PUBLIC_KEY);
-
-//        OPGProcessor repo = new OPGProcessor(CheckoutActivity.this, config);
-//        repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
-//            @Override
-//            public void onSuccess(PaymentIntentResponse response) {
-//                System.out.println("--- CREATE PAYMENT INTENT RESPONSE ---");
-//                System.out.println("Payment ID: "+response.id);
-//                System.out.println("Token: "+response.customerToken);
-//                System.out.println("Client secret: "+response.clientSecret);
-//
-//                tvPaymentId.setText("Payment ID: "+response.id);
-//                String paymentUrl = config.getBasePaymentURL() + response.id;
-//                System.out.println("PaymentUrl: "+paymentUrl);
-//
-//                webView.loadUrl(paymentUrl);
-//                webView.initPayment(PUBLIC_KEY, response.clientSecret, response.customerToken);
-//            }
-//
-//            @Override
-//            public void onError(String errorMessage) {
-//                System.out.println("Create payment intent error: "+errorMessage);
-//                Toast.makeText(getApplicationContext(), "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
-//            }
-//        });
+        webView.initPayment(PUBLIC_KEY, config, param);
     }
 
     @Override
@@ -116,7 +92,6 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
                                     returnIntent.putExtra("payment_msg", "Pembayaran berhasil!");
                                     setResult(Activity.RESULT_OK, returnIntent);
                                     finish();
-                                    //Toast.makeText(getApplicationContext(), "Pembayaran berhasil.", Toast.LENGTH_LONG).show();
                                 }
                             }, 5000);
     }
@@ -130,7 +105,6 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
                 returnIntent.putExtra("payment_msg", "Pembayaran pending...");
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
-                //Toast.makeText(getApplicationContext(), "Pembayaran pending.", Toast.LENGTH_LONG).show();
             }
         }, 5000);
     }
@@ -144,7 +118,6 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
                 returnIntent.putExtra("payment_msg", "Pembayaran gagal :(");
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
-                //Toast.makeText(getApplicationContext(), "Pembayaran gagal", Toast.LENGTH_LONG).show();
             }
         }, 5000);
     }
@@ -157,9 +130,9 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
     public void showAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Android OPG Demo")
+        builder.setTitle("OPG SDK Demo")
                 .setMessage(message)
-                .setCancelable(false) // Prevents closing if user clicks outside the dialog
+                .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
