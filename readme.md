@@ -28,8 +28,7 @@ Replace `%VERSION%` with the actual version number, e.g `0.2.0` or `0.1.1`, for 
 ```java
 public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 
-    OPGWebView webView;
-
+    private OPGWebView webView;
     private final String CLIENT_SECRET = "xxxxxxxxxxxxxxxxxxxx";
     private final String PUBLIC_KEY = "xxxxxxxxxxxxxxxxxxxx;
     private OPGConfig config;
@@ -78,6 +77,100 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
     @Override
     public void onFailed(String url) {
        Log.i(TAG, "The transaction is failed.");
+    }
+}
+```
+
+## Basic Usage (Kotlin)
+
+```kotlin
+pclass CheckoutActivity : AppCompatActivity(), OPGListener {
+
+    private var webView: OPGWebView? = null
+    private val CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131"
+    private val PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6"
+    private var TOTAL_CHECKOUT = 0
+    private var ENV_TYPE = 0
+    private var config: OPGConfig? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_checkout2)
+        TOTAL_CHECKOUT = getIntent().getIntExtra("TOTAL_CHECKOUT", 0)
+        ENV_TYPE = getIntent().getIntExtra("ENV_TYPE", 0)
+        webView = findViewById<OPGWebView?>(R.id.main_web_view)
+        webView!!.setListener(this)
+
+        initiatePayment()
+    }
+
+    fun initiatePayment() {
+        val param = PaymentIntentParam()
+        val randomNum = ThreadLocalRandom.current().nextInt(10000, 100000)
+        param.amount = TOTAL_CHECKOUT
+        param.currency = "IDR"
+        param.customerId = "customer_" + randomNum
+        param.description = "Test payment " + randomNum
+        param.merchantId = getString(R.string.MERCHANT_ID)
+        val metadata = PaymentMetadata()
+        metadata.orderId = "order_" + randomNum
+        param.metadata = metadata
+
+        if (ENV_TYPE == 0) {
+            config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                .setPublicKey(PUBLIC_KEY)
+                .setEnv(OPGEnvType.Env.DEV)
+                .build()
+        } else if (ENV_TYPE == 1) {
+            config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                .setPublicKey(PUBLIC_KEY)
+                .setEnv(OPGEnvType.Env.SANDBOX)
+                .build()
+        } else if (ENV_TYPE == 2) {
+            config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
+                .setPublicKey(PUBLIC_KEY)
+                .setEnv(OPGEnvType.Env.PROD)
+                .build()
+        }
+
+        webView!!.initPayment(PUBLIC_KEY, config, param)
+    }
+
+    override fun onSuccess(url: String?) {
+        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+            override fun run() {
+                val returnIntent = Intent()
+                returnIntent.putExtra("payment_msg", "Pembayaran berhasil!")
+                setResult(RESULT_OK, returnIntent)
+                finish()
+            }
+        }, 5000)
+    }
+
+    override fun onPending(url: String?) {
+        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+            override fun run() {
+                val returnIntent = Intent()
+                returnIntent.putExtra("payment_msg", "Pembayaran pending...")
+                setResult(RESULT_OK, returnIntent)
+                finish()
+            }
+        }, 5000)
+    }
+
+    override fun onFailed(url: String?) {
+        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+            override fun run() {
+                val returnIntent = Intent()
+                returnIntent.putExtra("payment_msg", "Pembayaran gagal :(")
+                setResult(RESULT_OK, returnIntent)
+                finish()
+            }
+        }, 5000)
+    }
+
+    override fun onClose() {
+
     }
 }
 ```
