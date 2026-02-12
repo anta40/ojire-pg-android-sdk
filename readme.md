@@ -137,36 +137,15 @@ pclass CheckoutActivity : AppCompatActivity(), OPGListener {
     }
 
     override fun onSuccess(url: String?) {
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
-            override fun run() {
-                val returnIntent = Intent()
-                returnIntent.putExtra("payment_msg", "Pembayaran berhasil!")
-                setResult(RESULT_OK, returnIntent)
-                finish()
-            }
-        }, 5000)
+       Log.i(TAG, "The transaction is successful");
     }
 
     override fun onPending(url: String?) {
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
-            override fun run() {
-                val returnIntent = Intent()
-                returnIntent.putExtra("payment_msg", "Pembayaran pending...")
-                setResult(RESULT_OK, returnIntent)
-                finish()
-            }
-        }, 5000)
+        Log.i(TAG, "The transaction is pending.");
     }
 
     override fun onFailed(url: String?) {
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
-            override fun run() {
-                val returnIntent = Intent()
-                returnIntent.putExtra("payment_msg", "Pembayaran gagal :(")
-                setResult(RESULT_OK, returnIntent)
-                finish()
-            }
-        }, 5000)
+        Log.i(TAG, "The transaction is failed.");
     }
 
     override fun onClose() {
