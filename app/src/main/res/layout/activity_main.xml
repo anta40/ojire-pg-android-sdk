@@ -57,7 +57,15 @@
         android:layout_below="@id/spnEnvType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checkout"
-        android:id="@+id/btnCheckout" />
+        android:text="Checkout (Java)"
+        android:id="@+id/btnCheckoutJava" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/btnCheckoutJava"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Checkout (Kotlin)"
+        android:id="@+id/btnCheckoutKotlin" />
 
 </RelativeLayout>

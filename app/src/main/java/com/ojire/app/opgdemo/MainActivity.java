@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
     private RecyclerView recyclerView;
     private CartAdapter adapter;
     private List<CartItem> itemList;
-    private Button btnCheckout;
+    private Button btnCheckoutJava, btnCheckoutKotlin;
     private List<CartItem> cartList;
     private TextView tvTotal;
     private int TOTAL_CHECKOUT;
@@ -51,17 +51,29 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         ENV_TYPE = 0;
 
         recyclerView = findViewById(R.id.recyclerView);
-        btnCheckout = findViewById(R.id.btnCheckout);
+        btnCheckoutJava = findViewById(R.id.btnCheckoutJava);
+        btnCheckoutKotlin = findViewById(R.id.btnCheckoutKotlin);
         tvTotal = findViewById(R.id.tvTotal);
         spnEnvType = findViewById(R.id.spnEnvType);
-        btnCheckout.setOnClickListener(new View.OnClickListener() {
+
+        btnCheckoutJava.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ENV_TYPE = spnEnvType.getSelectedItemPosition();
                 Intent checkoutIntent = new Intent(MainActivity.this, CheckoutActivity.class);
                 checkoutIntent.putExtra("ENV_TYPE", ENV_TYPE);
                 checkoutIntent.putExtra("TOTAL_CHECKOUT", TOTAL_CHECKOUT);
-                //startActivity(checkoutIntent);
+                startForResult.launch(checkoutIntent);
+            }
+        });
+
+        btnCheckoutKotlin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ENV_TYPE = spnEnvType.getSelectedItemPosition();
+                Intent checkoutIntent = new Intent(MainActivity.this, CheckoutActivity2.class);
+                checkoutIntent.putExtra("ENV_TYPE", ENV_TYPE);
+                checkoutIntent.putExtra("TOTAL_CHECKOUT", TOTAL_CHECKOUT);
                 startForResult.launch(checkoutIntent);
             }
         });
@@ -71,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         adapter = new CartAdapter(cartList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        //updateTotal();
 
     }
 
@@ -99,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
 
         builder.setTitle("Android OPG Demo")
                 .setMessage(message)
-                .setCancelable(false) // Prevents closing if user clicks outside the dialog
+                .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();

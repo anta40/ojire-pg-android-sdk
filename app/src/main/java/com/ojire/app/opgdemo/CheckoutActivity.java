@@ -125,20 +125,4 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
     public void onClose() {
 
     }
-
-    public void showAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("OPG SDK Demo")
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 }
