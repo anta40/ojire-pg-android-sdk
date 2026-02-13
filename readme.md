@@ -31,6 +31,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
     private OPGWebView webView;
     private final String CLIENT_SECRET = "xxxxxxxxxxxxxxxxxxxx";
     private final String PUBLIC_KEY = "xxxxxxxxxxxxxxxxxxxx;
+    private final int TOTAL_CHECKOUT = 35000
     private OPGConfig config;
 
     @Override
@@ -89,8 +90,7 @@ pclass CheckoutActivity : AppCompatActivity(), OPGListener {
     private var webView: OPGWebView? = null
     private val CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131"
     private val PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6"
-    private var TOTAL_CHECKOUT = 0
-    private var ENV_TYPE = 0
+    private var TOTAL_CHECKOUT = 35000
     private var config: OPGConfig? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,22 +116,11 @@ pclass CheckoutActivity : AppCompatActivity(), OPGListener {
         metadata.orderId = "order_" + randomNum
         param.metadata = metadata
 
-        if (ENV_TYPE == 0) {
-            config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
+        config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
                 .setPublicKey(PUBLIC_KEY)
                 .setEnv(OPGEnvType.Env.DEV)
                 .build()
-        } else if (ENV_TYPE == 1) {
-            config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                .setPublicKey(PUBLIC_KEY)
-                .setEnv(OPGEnvType.Env.SANDBOX)
-                .build()
-        } else if (ENV_TYPE == 2) {
-            config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                .setPublicKey(PUBLIC_KEY)
-                .setEnv(OPGEnvType.Env.PROD)
-                .build()
-        }
+       
 
         webView!!.initPayment(PUBLIC_KEY, config, param)
     }
