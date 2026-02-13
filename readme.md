@@ -96,8 +96,6 @@ pclass CheckoutActivity : AppCompatActivity(), OPGListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout2)
-        TOTAL_CHECKOUT = getIntent().getIntExtra("TOTAL_CHECKOUT", 0)
-        ENV_TYPE = getIntent().getIntExtra("ENV_TYPE", 0)
         webView = findViewById<OPGWebView?>(R.id.main_web_view)
         webView!!.setListener(this)
 
