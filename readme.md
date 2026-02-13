@@ -32,7 +32,6 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
     private final String CLIENT_SECRET = "xxxxxxxxxxxxxxxxxxxx";
     private final String PUBLIC_KEY = "xxxxxxxxxxxxxxxxxxxx;
     private final int TOTAL_CHECKOUT = 35000
-    private OPGConfig config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,6 @@ class CheckoutActivity : AppCompatActivity(), OPGListener {
     private val CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131"
     private val PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6"
     private var TOTAL_CHECKOUT = 35000
-    private var config: OPGConfig? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,7 +112,7 @@ class CheckoutActivity : AppCompatActivity(), OPGListener {
         metadata.orderId = "order_" + randomNum
         param.metadata = metadata
 
-        config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
+        val config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
                 .setPublicKey(PUBLIC_KEY)
                 .setEnv(OPGEnvType.Env.DEV)
                 .build()
