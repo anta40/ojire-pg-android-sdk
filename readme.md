@@ -85,7 +85,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 ## Basic Usage (Kotlin)
 
 ```kotlin
-pclass CheckoutActivity : AppCompatActivity(), OPGListener {
+class CheckoutActivity : AppCompatActivity(), OPGListener {
 
     private var webView: OPGWebView? = null
     private val CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131"
