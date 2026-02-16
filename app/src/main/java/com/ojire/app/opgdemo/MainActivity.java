@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
     private List<CartItem> cartList;
     private TextView tvTotal;
     private int TOTAL_CHECKOUT;
-    private int ENV_TYPE;
 
     private final String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
     private final String PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
@@ -47,12 +46,8 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     if (data != null) {
-                        System.out.println("OPG result ada");
                         String payment_msg = data.getStringExtra("OPG_RESULT");
                         showAlert(payment_msg);
-                    }
-                    else {
-                        System.out.println("OPG result null");
                     }
                 }
             });
@@ -63,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         setContentView(R.layout.activity_main);
 
         TOTAL_CHECKOUT = 20500;
-        ENV_TYPE = 0;
 
         recyclerView = findViewById(R.id.recyclerView);
         btnCheckout = findViewById(R.id.btnCheckout);

@@ -28,116 +28,66 @@ Replace `%VERSION%` with the actual version number, e.g `0.2.0` or `0.1.1`, for 
 ```java
 public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 
-    private OPGWebView webView;
-    private final String CLIENT_SECRET = "xxxxxxxxxxxxxxxxxxxx";
-    private final String PUBLIC_KEY = "xxxxxxxxxxxxxxxxxxxx;
-    private final int TOTAL_CHECKOUT = 35000
+   public class MainActivity extends AppCompatActivity {
+
+    private final String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
+    private final String PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
+    private final String MERCHANT_ID = "949f9617-1333-4626-b29b-a049b45aa568";
+
+    private final ActivityResultLauncher<Intent> startForResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        String payment_msg = data.getStringExtra("OPG_RESULT");
+                        showAlert(payment_msg);
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkout);
-        webView = findViewById(R.id.main_web_view);
-        webView.setListener(this);
+        setContentView(R.layout.activity_main);
 
-        initiatePayment();
-    }
+        TOTAL_CHECKOUT = 38500;
 
-    void initiatePayment(){
         PaymentIntentParam param = new PaymentIntentParam();
         int randomNum = ThreadLocalRandom.current().nextInt(10000, 100000);
         param.amount = TOTAL_CHECKOUT;
         param.currency = "IDR";
         param.customerId = "customer_"+randomNum;
         param.description = "Test payment "+randomNum;
-        param.merchantId = getString(R.string.MERCHANT_ID);
+        param.merchantId = MERCHANT_ID;
         PaymentMetadata metadata = new PaymentMetadata();
         metadata.orderId = "order_"+randomNum;
         param.metadata = metadata;
 
+        OPGProcessor repo = new OPGProcessor(MainActivity.this, "DEV", CLIENT_SECRET);
+        repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
+            @Override
+            public void onSuccess(PaymentIntentResponse response) {
+                Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
+                checkoutIntent.putExtra("ENV", "DEV");
+                checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
+                checkoutIntent.putExtra("CLIENT_SECRET",response.clientSecret);
+                checkoutIntent.putExtra("PAYMENT_ID",response.id);
+                checkoutIntent.putExtra("CUSTOMER_TOKEN",response.customerToken);
+                startForResult.launch(checkoutIntent);
+            }
 
-        OPGConfig config = new OPGConfig.ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                    .setPublicKey(PUBLIC_KEY)
-                    .setEnv(OPGEnvType.Env.DEV)
-                    .build();
-
-        webView.initPayment(PUBLIC_KEY, config, param);
-    }
-
-    @Override
-    public void onSuccess(String url) {
-        Log.i(TAG, "The transaction is successful");
-    }
-
-    @Override
-    public void onPending(String url) {
-        Log.i(TAG, "The transaction is pending.");
-    }
-
-    @Override
-    public void onFailed(String url) {
-       Log.i(TAG, "The transaction is failed.");
+            @Override
+                public void onError(String errorMessage) {
+                    System.out.println("Create payment intent error: "+errorMessage);
+                    Toast.makeText(MainActivity.this, "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }
 ```
 
-## Basic Usage (Kotlin)
-
-```kotlin
-class CheckoutActivity : AppCompatActivity(), OPGListener {
-
-    private var webView: OPGWebView? = null
-    private val CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131"
-    private val PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6"
-    private var TOTAL_CHECKOUT = 35000
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_checkout2)
-        webView = findViewById<OPGWebView?>(R.id.main_web_view)
-        webView!!.setListener(this)
-
-        initiatePayment()
-    }
-
-    fun initiatePayment() {
-        val param = PaymentIntentParam()
-        val randomNum = ThreadLocalRandom.current().nextInt(10000, 100000)
-        param.amount = TOTAL_CHECKOUT
-        param.currency = "IDR"
-        param.customerId = "customer_" + randomNum
-        param.description = "Test payment " + randomNum
-        param.merchantId = getString(R.string.MERCHANT_ID)
-        val metadata = PaymentMetadata()
-        metadata.orderId = "order_" + randomNum
-        param.metadata = metadata
-
-        val config = ConfigBuilder().setClientSecret(CLIENT_SECRET)
-                .setPublicKey(PUBLIC_KEY)
-                .setEnv(OPGEnvType.Env.DEV)
-                .build()
-       
-
-        webView!!.initPayment(PUBLIC_KEY, config, param)
-    }
-
-    override fun onSuccess(url: String?) {
-       Log.i(TAG, "The transaction is successful");
-    }
-
-    override fun onPending(url: String?) {
-        Log.i(TAG, "The transaction is pending.");
-    }
-
-    override fun onFailed(url: String?) {
-        Log.i(TAG, "The transaction is failed.");
-    }
-
-    override fun onClose() {
-
-    }
-}
-```
 
 ---
 
@@ -145,9 +95,11 @@ class CheckoutActivity : AppCompatActivity(), OPGListener {
 
 | Name | Type | Required | Description |
 |-----|-----|---------|-------------|
-| `clientSecret` | `String` | ✅ | Client secret provided from backed|
+| `paymentId` | `String` | ✅ | Payment intent ID|
+| `clientSecret` | `String` | ✅ | Client secret provided from backend|
 | `publicKey` | `String` | ✅ | Merchant's public key |
-| `env` | `OPGEnvType.Env` | ✅  | Environment (`DEV`, `SANDBOX`, or `PROD`) |
+| `token` | `String` | ✅ | Customer token |
+| `env` | `String` | ✅  | Environment (`DEV`, `SANDBOX`, or `PROD`) |
 
 
 ---
