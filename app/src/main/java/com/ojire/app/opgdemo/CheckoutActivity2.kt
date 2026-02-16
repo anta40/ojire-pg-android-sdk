@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.ojire.sdk.opg.InternalOPGListener
 import com.ojire.sdk.opg.OPGConfig
 import com.ojire.sdk.opg.OPGConfig.ConfigBuilder
 import com.ojire.sdk.opg.OPGEnvType
@@ -15,7 +16,7 @@ import com.ojire.sdk.opg.model.PaymentIntentParam
 import com.ojire.sdk.opg.model.PaymentMetadata
 import java.util.concurrent.ThreadLocalRandom
 
-class CheckoutActivity2 : AppCompatActivity(), OPGListener {
+class CheckoutActivity2 : AppCompatActivity(), InternalOPGListener {
 
     var webView: OPGWebView? = null
     private val tvPaymentId: TextView? = null
@@ -102,7 +103,4 @@ class CheckoutActivity2 : AppCompatActivity(), OPGListener {
         }, 5000)
     }
 
-    override fun onClose() {
-
-    }
 }

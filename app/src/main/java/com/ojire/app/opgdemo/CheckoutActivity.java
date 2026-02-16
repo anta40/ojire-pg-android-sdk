@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ojire.sdk.opg.InternalOPGListener;
 import com.ojire.sdk.opg.OPGConfig;
 import com.ojire.sdk.opg.OPGEnvType;
 import com.ojire.sdk.opg.OPGListener;
@@ -25,7 +26,7 @@ import com.ojire.sdk.opg.model.PaymentMetadata;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CheckoutActivity extends AppCompatActivity implements OPGListener {
+public class CheckoutActivity extends AppCompatActivity implements InternalOPGListener {
 
     OPGWebView webView;
     private TextView tvPaymentId;
@@ -121,8 +122,4 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
         }, 5000);
     }
 
-    @Override
-    public void onClose() {
-
-    }
 }

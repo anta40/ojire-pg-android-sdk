@@ -44,7 +44,7 @@ public class OPGWebView extends WebView  {
     }
 
     private String foo;
-    private OPGListener listener;
+    private InternalOPGListener listener;
     private String currentUrl;
     private boolean urlIsChanged;
     private Context ctxt;
@@ -69,7 +69,7 @@ public class OPGWebView extends WebView  {
 //        }
 //    }
 
-    public void setListener(OPGListener listener){
+    public void setListener(InternalOPGListener listener){
         this.listener = listener;
     }
 

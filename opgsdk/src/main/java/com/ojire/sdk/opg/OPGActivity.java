@@ -1,5 +1,7 @@
 package com.ojire.sdk.opg;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
@@ -42,13 +44,37 @@ public class OPGActivity extends AppCompatActivity {
 
                 System.out.println("OPGWebView::onPageFinished URL: "+url);
                 if (url.contains("status=succeeded")){
-                    //listener.onSuccess(url);
+                    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("OPG_RESULT", "SUCCESS");
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            finish();
+                        }
+                    }, 5000);
                 }
                 else if (url.contains("status=failed")){
-                   // listener.onFailed(url);
+                    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("OPG_RESULT", "FAILED");
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            finish();
+                        }
+                    }, 5000);
                 }
                 else if (url.contains("status=pending")){
-                   // listener.onPending(url);
+                    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("OPG_RESULT", "FAILED");
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            finish();
+                        }
+                    }, 5000);
                 }
                 else {
                     try {
