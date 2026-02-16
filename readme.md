@@ -36,9 +36,7 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 
    public class MainActivity extends AppCompatActivity {
 
-    private final String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
-    private final String PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
-    private final String MERCHANT_ID = "949f9617-1333-4626-b29b-a049b45aa568";
+    private final String PUBLIC_KEY = "pk_xxxxxxxxxxxxxxxxxxxx";
 
     private final ActivityResultLauncher<Intent> startForResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
