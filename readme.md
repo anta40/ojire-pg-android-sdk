@@ -1,4 +1,4 @@
-How to use Ojire PG Android SDK (Java/Kotlin)
+**How to use Ojire PG Android SDK (Java/Kotlin)**
 
 > ⚠️ **Caution**
 >
