@@ -1,5 +1,11 @@
 How to use Ojire PG Android SDK (Java/Kotlin)
 
+> ⚠️ **Caution**
+>
+> You must get `customer_token`, `client_secret` and `payment_id` first at your backend to OJIRE API via request to `/v1/payment-intents` endpoint
+
+---
+
 ## Installation 
 
 First adjust your **settings.gradle.kts**:
@@ -53,37 +59,18 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
 
         TOTAL_CHECKOUT = 38500;
 
-        PaymentIntentParam param = new PaymentIntentParam();
-        int randomNum = ThreadLocalRandom.current().nextInt(10000, 100000);
-        param.amount = TOTAL_CHECKOUT;
-        param.currency = "IDR";
-        param.customerId = "customer_"+randomNum;
-        param.description = "Test payment "+randomNum;
-        param.merchantId = MERCHANT_ID;
-        PaymentMetadata metadata = new PaymentMetadata();
-        metadata.orderId = "order_"+randomNum;
-        param.metadata = metadata;
+        /*
+        First ask your backend to call /v1/payment-intents from OJIRE API to get the PAYMENT_ID, CLIENT_SECRET, CUSTOMER_TOKEN
+        */
 
-        OPGProcessor repo = new OPGProcessor(MainActivity.this, "DEV", CLIENT_SECRET);
-        repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
-            @Override
-            public void onSuccess(PaymentIntentResponse response) {
-                Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
-                checkoutIntent.putExtra("ENV", "DEV");
-                checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
-                checkoutIntent.putExtra("CLIENT_SECRET",response.clientSecret);
-                checkoutIntent.putExtra("PAYMENT_ID",response.id);
-                checkoutIntent.putExtra("CUSTOMER_TOKEN",response.customerToken);
-                startForResult.launch(checkoutIntent);
-            }
+        Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
+        checkoutIntent.putExtra("ENV", "DEV");
+        checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
+        checkoutIntent.putExtra("CLIENT_SECRET",CLIENT_SECRET);
+        checkoutIntent.putExtra("PAYMENT_ID",PAYMENT_ID;
+        checkoutIntent.putExtra("CUSTOMER_TOKEN",CUSTOMER_TOKEN);
+        startForResult.launch(checkoutIntent);
 
-            @Override
-                public void onError(String errorMessage) {
-                    System.out.println("Create payment intent error: "+errorMessage);
-                    Toast.makeText(MainActivity.this, "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
     }
 }
 ```
