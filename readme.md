@@ -32,8 +32,6 @@ Replace `%VERSION%` with the actual version number, e.g `0.2.0` or `0.1.1`, for 
 ## Basic Usage (Java)
 
 ```java
-public class CheckoutActivity extends AppCompatActivity implements OPGListener {
-
    public class MainActivity extends AppCompatActivity {
 
     private final String PUBLIC_KEY = "pk_xxxxxxxxxxxxxxxxxxxx";
