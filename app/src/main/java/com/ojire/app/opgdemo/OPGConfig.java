@@ -1,4 +1,6 @@
-package com.ojire.sdk.opg;
+package com.ojire.app.opgdemo;
+
+import com.ojire.sdk.opg.OPGEnvType;
 
 public class OPGConfig {
 

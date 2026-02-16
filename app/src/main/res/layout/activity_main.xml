@@ -36,36 +36,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_marginTop="30dp"
-        android:textStyle="bold"
+<!--    <TextView-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_below="@id/tvTotal"-->
+<!--        android:id="@+id/tvEnvType"-->
+<!--        android:text="OPG Environment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
+
+<!--    <Spinner-->
+<!--        android:layout_below="@id/tvEnvType"-->
+<!--        android:id="@+id/spnEnvType"-->
+<!--        android:entries="@array/env_list"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_marginTop="10dp"
         android:layout_below="@id/tvTotal"
-        android:id="@+id/tvEnvType"
-        android:text="OPG Environment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Spinner
-        android:layout_below="@id/tvEnvType"
-        android:id="@+id/spnEnvType"
-        android:entries="@array/env_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/spnEnvType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checkout (Java)"
-        android:id="@+id/btnCheckoutJava" />
+        android:text="Checkout"
+        android:id="@+id/btnCheckout" />
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/btnCheckoutJava"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Checkout (Kotlin)"
-        android:id="@+id/btnCheckoutKotlin" />
 
 </RelativeLayout>

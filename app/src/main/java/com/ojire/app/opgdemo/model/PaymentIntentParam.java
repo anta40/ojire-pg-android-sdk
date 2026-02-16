@@ -1,4 +1,4 @@
-package com.ojire.sdk.opg.model;
+package com.ojire.app.opgdemo.model;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,6 @@
-package com.ojire.sdk.opg;
+package com.ojire.app.opgdemo;
+
+import com.ojire.app.opgdemo.OPGAPIService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -8,8 +10,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OPGAPIClient {
     private static Retrofit retrofit = null;
 
-    public static OPGAPIService getAPIService(String BASE_URL, String CLIENT_SECRET) {
+    public static OPGAPIService getAPIService(String env, String CLIENT_SECRET) {
         if (retrofit == null) {
+            String BASE_URL = "";
+
+            if (env.equals("DEV")){
+                BASE_URL = "https://api-dev.ojire.com/";
+            } else if (env.equals("SANDBOX")){
+                BASE_URL = "https://api-sandbox.ojire.com/";
+            } else if (env.equals("PROD")){
+                BASE_URL = "https://api.ojire.online";
+            }
 
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {

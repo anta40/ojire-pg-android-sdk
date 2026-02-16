@@ -17,12 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidOPGDemo">
         <activity
-            android:name=".CheckoutActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".CheckoutActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -1,7 +1,7 @@
-package com.ojire.sdk.opg;
+package com.ojire.app.opgdemo;
 
-import com.ojire.sdk.opg.model.PaymentIntentParam;
-import com.ojire.sdk.opg.model.PaymentIntentResponse;
+import com.ojire.app.opgdemo.model.PaymentIntentParam;
+import com.ojire.app.opgdemo.model.PaymentIntentResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

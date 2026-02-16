@@ -1,9 +1,12 @@
-package com.ojire.sdk.opg;
+package com.ojire.app.opgdemo;
 
 import android.content.Context;
 
-import com.ojire.sdk.opg.model.PaymentIntentParam;
-import com.ojire.sdk.opg.model.PaymentIntentResponse;
+import com.ojire.app.opgdemo.model.PaymentIntentParam;
+import com.ojire.app.opgdemo.model.PaymentIntentResponse;
+import com.ojire.app.opgdemo.OPGAPIClient;
+import com.ojire.app.opgdemo.OPGAPIService;
+import com.ojire.app.opgdemo.OPGConfig;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,10 +22,10 @@ public class OPGProcessor {
         void onError(String errorMessage);
     }
 
-    public OPGProcessor(Context ctxt, OPGConfig config) {
+    public OPGProcessor(Context ctxt, String env, String clientSecret) {
         this.ctxt = ctxt;
         this.config = config;
-        this.apiService = OPGAPIClient.getAPIService(config.getBaseAPIUrl(), config.getClientSecret());
+        this.apiService = OPGAPIClient.getAPIService(env, clientSecret);
     }
 
     public void doGetToken(PaymentIntentParam param, PaymentCallback callback){
