@@ -88,13 +88,13 @@ Replace `%VERSION%` with the actual version number, e.g `0.2.0` or `0.1.1`, for 
 
 ---
 
-## Callbacks
+## Return Codes
 
-| Callback | Params | Description |
-|--------|-------|------------|
-| `onSuccess` | `String` | Payment is succesful |
-| `onPending` | `String` | Payment is pending |
-| `onFailed` | `String` | Payment is failed |
-| `onClose` | `void` | User closes payment page |
+| Code| Description |
+|--------|------------|
+| `SUCCESS` | Payment is succesful |
+| `PENDING` | Payment is pending |
+| `FAILED`  | Payment is failed |
+| `CLOSE`  | User closes payment page |
 
 ---
