@@ -58,7 +58,8 @@ public class CheckoutActivity extends AppCompatActivity implements OPGListener {
         TOTAL_CHECKOUT = 38500;
 
         /*
-        First ask your backend to call /v1/payment-intents from OJIRE API to get the PAYMENT_ID, CLIENT_SECRET, CUSTOMER_TOKEN
+        First ask your backend to call /v1/payment-intents from OJIRE API to get the 
+        PAYMENT_ID, CLIENT_SECRET, CUSTOMER_TOKEN
         */
 
         Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
