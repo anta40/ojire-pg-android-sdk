@@ -47,8 +47,12 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     if (data != null) {
+                        System.out.println("OPG result ada");
                         String payment_msg = data.getStringExtra("OPG_RESULT");
                         showAlert(payment_msg);
+                    }
+                    else {
+                        System.out.println("OPG result null");
                     }
                 }
             });
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                         checkoutIntent.putExtra("CLIENT_SECRET",response.clientSecret);
                         checkoutIntent.putExtra("PAYMENT_ID",response.id);
                         checkoutIntent.putExtra("CUSTOMER_TOKEN",response.customerToken);
-                        startActivity(checkoutIntent);
+                        startForResult.launch(checkoutIntent);
                     }
 
                     @Override

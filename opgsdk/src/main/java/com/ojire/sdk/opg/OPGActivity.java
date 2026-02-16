@@ -84,7 +84,9 @@ public class OPGActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
+                System.out.println("[DBG URL] "+url);
                 if (url.contains("status=succeeded")){
+                    System.out.println("Intent OPG sukses");
                     new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -96,6 +98,7 @@ public class OPGActivity extends AppCompatActivity {
                     }, 5000);
                 }
                 else if (url.contains("status=failed")){
+                    System.out.println("Intent OPG failed");
                     new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -107,6 +110,7 @@ public class OPGActivity extends AppCompatActivity {
                     }, 5000);
                 }
                 else if (url.contains("status=pending")){
+                    System.out.println("Intent OPG pending");
                     new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
