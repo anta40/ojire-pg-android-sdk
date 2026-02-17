@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     if (data != null) {
-                        String payment_msg = data.getStringExtra("OPG_RESULT");
+                        String payment_msg = data.getStringExtra("OPG_EVENT_STATUS");
                         showAlert(payment_msg);
                     }
                 }
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
     public void showAlert(String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Android OPG Demo")
+        builder.setTitle("OPG SDK Demo")
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

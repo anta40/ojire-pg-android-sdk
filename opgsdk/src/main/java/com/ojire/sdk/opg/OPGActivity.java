@@ -61,7 +61,7 @@ public class OPGActivity extends AppCompatActivity {
             @Override
             public void handleOnBackPressed() {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("OPG_RESULT", "CLOSE");
+                returnIntent.putExtra("OPG_EVENT_STATUS", OPGEvent.CLOSED.toString());
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
 
@@ -84,38 +84,37 @@ public class OPGActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                System.out.println("[DBG URL] "+url);
+                //System.out.println("[DBG URL] "+url);
                 if (url.contains("status=succeeded")){
-                    System.out.println("Intent OPG sukses");
                     new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Intent returnIntent = new Intent();
-                            returnIntent.putExtra("OPG_RESULT", "SUCCESS");
+                            returnIntent.putExtra("OPG_EVENT_STATUS", OPGEvent.SUCCESS.toString());
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }
                     }, 5000);
                 }
                 else if (url.contains("status=failed")){
-                    System.out.println("Intent OPG failed");
+                   // System.out.println("Intent OPG failed");
                     new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Intent returnIntent = new Intent();
-                            returnIntent.putExtra("OPG_RESULT", "FAILED");
+                            returnIntent.putExtra("OPG_EVENT_STATUS", OPGEvent.FAILED.toString());
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }
                     }, 5000);
                 }
                 else if (url.contains("status=pending")){
-                    System.out.println("Intent OPG pending");
+                    //System.out.println("Intent OPG pending");
                     new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Intent returnIntent = new Intent();
-                            returnIntent.putExtra("OPG_RESULT", "PENDING");
+                            returnIntent.putExtra("OPG_EVENT_STATUS", OPGEvent.PENDING.toString());
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }
@@ -156,5 +155,9 @@ public class OPGActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    public enum OPGEvent {
+        SUCCESS, FAILED, PENDING, CLOSED
     }
 }
