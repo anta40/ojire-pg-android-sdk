@@ -16,7 +16,7 @@
         android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Online Shop Demo" />
+        android:text="ArtoPay SDK Demo" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/tvTitle"
