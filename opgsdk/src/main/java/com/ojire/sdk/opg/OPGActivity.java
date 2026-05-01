@@ -48,13 +48,16 @@ public class OPGActivity extends AppCompatActivity {
         ENV = getIntent().getStringExtra("ENV");
 
         if (ENV.equals("DEV")){
-            paymentUrl = "https://pay-dev.ojire.com/pay/" + PAYMENT_ID;
+            //paymentUrl = "https://pay-dev.ojire.com/pay/" + PAYMENT_ID;
+            paymentUrl = "https://pay-sandbox.arto-pay.com/arto-pay/" + PAYMENT_ID;
         }
         else if (ENV.equals("SANDBOX")){
-            paymentUrl = "https://pay-sandbox.ojire.com/pay/" + PAYMENT_ID;
+            //paymentUrl = "https://pay-sandbox.ojire.com/pay/" + PAYMENT_ID;
+            paymentUrl = "https://pay-sandbox.arto-pay.com/arto-pay/" + PAYMENT_ID;
         }
         else if (ENV.equals("PROD")){
             paymentUrl = "https://pay.ojire.online/pay/" + PAYMENT_ID;
+            paymentUrl = "https://pay.arto-pay.com/arto-pay/" + PAYMENT_ID;
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
