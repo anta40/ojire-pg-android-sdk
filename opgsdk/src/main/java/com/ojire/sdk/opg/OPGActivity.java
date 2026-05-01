@@ -26,6 +26,7 @@ public class OPGActivity extends AppCompatActivity {
     private String CUSTOMER_TOKEN;
     private String PAYMENT_ID;
     private String ENV;
+    private String ORDER_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class OPGActivity extends AppCompatActivity {
         CLIENT_SECRET = getIntent().getStringExtra("CLIENT_SECRET");
         CUSTOMER_TOKEN = getIntent().getStringExtra("CUSTOMER_TOKEN");
         PAYMENT_ID = getIntent().getStringExtra("PAYMENT_ID");
+        ORDER_ID = getIntent().getStringExtra("ORDER_ID");
         ENV = getIntent().getStringExtra("ENV");
 
         if (ENV.equals("DEV")){
@@ -75,12 +77,12 @@ public class OPGActivity extends AppCompatActivity {
         });
 
         opgWebView.loadUrl(paymentUrl);
-        handlePaymentIntent(PUBLIC_KEY, CLIENT_SECRET, CUSTOMER_TOKEN);
+        handlePaymentIntent(PUBLIC_KEY, CLIENT_SECRET, CUSTOMER_TOKEN, ORDER_ID);
     }
 
 
 
-    private void handlePaymentIntent(String pubKey, String clientSecret, String customerToken){
+    private void handlePaymentIntent(String pubKey, String clientSecret, String customerToken, String orderId){
 
         opgWebView.setWebViewClient(new WebViewClient(){
             @Override
@@ -130,6 +132,7 @@ public class OPGActivity extends AppCompatActivity {
                         payload.put("clientSecret", clientSecret);
                         payload.put("publicKey", pubKey);
                         payload.put("token", customerToken);
+                        payload.put("orderId", orderId);
 
                         String jsCode =
                                 "window.postMessage(" +

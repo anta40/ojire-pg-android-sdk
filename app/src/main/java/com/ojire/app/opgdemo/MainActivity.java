@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                                     checkoutIntent.putExtra("CLIENT_SECRET",piresponse.clientSecret);
                                     checkoutIntent.putExtra("PAYMENT_ID",piresponse.id);
                                     checkoutIntent.putExtra("CUSTOMER_TOKEN",piresponse.customerToken);
+                                    checkoutIntent.putExtra("ORDER_ID", piresponse.id);
                                     startForResult.launch(checkoutIntent);
 //                                    System.out.println("Client secret: "+piresponse.clientSecret);
 //                                    System.out.println("Intent ID: "+piresponse.id);
