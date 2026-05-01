@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -17,11 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.Gson;
 import com.ojire.app.opgdemo.model.PaymentIntentParam;
 import com.ojire.app.opgdemo.model.PaymentIntentResponse;
-import com.ojire.app.opgdemo.OPGConfig;
 import com.ojire.app.opgdemo.model.PaymentMetadata;
 import com.ojire.sdk.opg.OPGActivity;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,31 +80,75 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 PaymentMetadata metadata = new PaymentMetadata();
                 metadata.orderId = "order_"+randomNum;
                 param.metadata = metadata;
+//
+//                OPGProcessor repo = new OPGProcessor(MainActivity.this, "DEV", CLIENT_SECRET);
+//                repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
+//                    @Override
+//                    public void onSuccess(PaymentIntentResponse response) {
+//                        System.out.println("--- CREATE PAYMENT INTENT RESPONSE ---");
+//                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//                        String prettyJson = gson.toJson(response);
+//                        System.out.println("Raw payment intent response: "+ prettyJson);
+//                        System.out.println("Payment ID: "+response.id);
+//                        System.out.println("Token: "+response.customerToken);
+//                        System.out.println("Client secret: "+response.clientSecret);
+//
+//                        Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
+//                        checkoutIntent.putExtra("ENV", "DEV");
+//                        checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
+//                        checkoutIntent.putExtra("CLIENT_SECRET",response.clientSecret);
+//                        checkoutIntent.putExtra("PAYMENT_ID",response.id);
+//                        checkoutIntent.putExtra("CUSTOMER_TOKEN",response.customerToken);
+//                        startForResult.launch(checkoutIntent);
+//                    }
+//
+//                    @Override
+//                    public void onError(String errorMessage) {
+//                        System.out.println("Create payment intent error: "+errorMessage);
+//                        Toast.makeText(MainActivity.this, "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
+//                    }
+//                });
 
-                OPGProcessor repo = new OPGProcessor(MainActivity.this, "DEV", CLIENT_SECRET);
-                repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
-                    @Override
-                    public void onSuccess(PaymentIntentResponse response) {
-                        System.out.println("--- CREATE PAYMENT INTENT RESPONSE ---");
-                        System.out.println("Payment ID: "+response.id);
-                        System.out.println("Token: "+response.customerToken);
-                        System.out.println("Client secret: "+response.clientSecret);
+                String jsonString = new Gson().toJson(param);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(jsonString);
 
-                        Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
-                        checkoutIntent.putExtra("ENV", "DEV");
-                        checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
-                        checkoutIntent.putExtra("CLIENT_SECRET",response.clientSecret);
-                        checkoutIntent.putExtra("PAYMENT_ID",response.id);
-                        checkoutIntent.putExtra("CUSTOMER_TOKEN",response.customerToken);
-                        startForResult.launch(checkoutIntent);
-                    }
+                    AndroidNetworking.post("https://api-dev.arto-pay.com/v1/payment-intents")
+                            .addHeaders("X-Secret-Key", CLIENT_SECRET)
+                            .addJSONObjectBody(jsonObject)
+                            .setTag("test")
+                            .setPriority(Priority.MEDIUM)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    PaymentIntentResponse piresponse  = new Gson().fromJson(response.toString(),
+                                            PaymentIntentResponse.class);
+                                    System.out.println("FAN response: "+response.toString());
+                                    Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
+                                    checkoutIntent.putExtra("ENV", "DEV");
+                                    checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
+                                    checkoutIntent.putExtra("CLIENT_SECRET",piresponse.clientSecret);
+                                    checkoutIntent.putExtra("PAYMENT_ID",piresponse.id);
+                                    checkoutIntent.putExtra("CUSTOMER_TOKEN",piresponse.customerToken);
+                                    startForResult.launch(checkoutIntent);
+//                                    System.out.println("Client secret: "+piresponse.clientSecret);
+//                                    System.out.println("Intent ID: "+piresponse.id);
+//                                    System.out.println("Customer token: "+piresponse.customerToken);
+                                }
+                                @Override
+                                public void onError(ANError error) {
+                                    System.out.println("FAN error: "+error.getErrorDetail());
+                                }
+                            });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                    @Override
-                    public void onError(String errorMessage) {
-                        System.out.println("Create payment intent error: "+errorMessage);
-                        Toast.makeText(MainActivity.this, "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
-                    }
-                });
+
+
+
             }
         });
 

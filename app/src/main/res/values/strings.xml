@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidOPGDemo</string>
+    <string name="app_name">ArtoPayDemo</string>
     <string name="MERCHANT_ID">949f9617-1333-4626-b29b-a049b45aa568</string>
 
     <string-array name="env_list">
