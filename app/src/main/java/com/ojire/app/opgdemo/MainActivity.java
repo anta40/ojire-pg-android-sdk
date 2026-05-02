@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
+import com.moczul.ok2curl.CurlInterceptor;
+import com.moczul.ok2curl.logger.Logger;
 import com.ojire.app.opgdemo.model.PaymentIntentParam;
 import com.ojire.app.opgdemo.model.PaymentIntentResponse;
 import com.ojire.app.opgdemo.model.PaymentMetadata;
@@ -30,6 +33,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity implements CartAdapter.OnCartChangedListener {
     private RecyclerView recyclerView;
@@ -86,6 +91,16 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 try {
                     jsonObject = new JSONObject(jsonString);
 
+                    OkHttpClient customHttpClient = new OkHttpClient.Builder()
+                            .addInterceptor(new CurlInterceptor(new Logger() {
+                                @Override
+                                public void log(String message) {
+                                    Log.v("OK2CURL", message);
+                                }
+                            }))
+                            .build();
+
+                    AndroidNetworking.initialize(getApplicationContext(), customHttpClient);
                     AndroidNetworking.post("https://api-dev.arto-pay.com/v1/payment-intents")
                             .addHeaders("X-Secret-Key", X_CLIENT_SECRET)
                             .addJSONObjectBody(jsonObject)
@@ -104,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                                     checkoutIntent.putExtra("CLIENT_SECRET",piresponse.clientSecret);
                                     checkoutIntent.putExtra("PAYMENT_ID",piresponse.id);
                                     checkoutIntent.putExtra("CUSTOMER_TOKEN",piresponse.customerToken);
-                                    checkoutIntent.putExtra("ORDER_ID", piresponse.id);
                                     startForResult.launch(checkoutIntent);
                                 }
                                 @Override

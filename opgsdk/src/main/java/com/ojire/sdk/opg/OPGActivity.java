@@ -26,7 +26,6 @@ public class OPGActivity extends AppCompatActivity {
     private String CUSTOMER_TOKEN;
     private String PAYMENT_ID;
     private String ENV;
-    private String ORDER_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,6 @@ public class OPGActivity extends AppCompatActivity {
         CLIENT_SECRET = getIntent().getStringExtra("CLIENT_SECRET");
         CUSTOMER_TOKEN = getIntent().getStringExtra("CUSTOMER_TOKEN");
         PAYMENT_ID = getIntent().getStringExtra("PAYMENT_ID");
-        ORDER_ID = getIntent().getStringExtra("ORDER_ID");
         ENV = getIntent().getStringExtra("ENV");
 
         if (ENV.equals("DEV")){
@@ -61,6 +59,8 @@ public class OPGActivity extends AppCompatActivity {
             paymentUrl = "https://pay.ojire.online/pay/" + PAYMENT_ID;
             paymentUrl = "https://pay.arto-pay.com/arto-pay/" + PAYMENT_ID;
         }
+
+        System.out.println("Loaded payment URL: "+paymentUrl);
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -77,7 +77,7 @@ public class OPGActivity extends AppCompatActivity {
         });
 
         opgWebView.loadUrl(paymentUrl);
-        handlePaymentIntent(PUBLIC_KEY, CLIENT_SECRET, CUSTOMER_TOKEN, ORDER_ID);
+        handlePaymentIntent(PUBLIC_KEY, CLIENT_SECRET, CUSTOMER_TOKEN, PAYMENT_ID);
     }
 
 
