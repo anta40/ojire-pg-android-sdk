@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
     private TextView tvTotal;
     private int TOTAL_CHECKOUT;
 
-    private final String CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
-    private final String PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
+    private final String X_CLIENT_SECRET = "sk_1769591280469729bd24176959128046989e6f78b694f70b4131";
+    private final String X_PUBLIC_KEY = "pk_1769591280469729bd24176959128046990a6531e6a9fdf3cbd6";
     private final String MERCHANT_ID = "949f9617-1333-4626-b29b-a049b45aa568";
 
     private final ActivityResultLauncher<Intent> startForResult = registerForActivityResult(
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                     Intent data = result.getData();
                     if (data != null) {
                         String payment_msg = data.getStringExtra("OPG_EVENT_STATUS");
-                        showAlert(payment_msg);
+                        showAlert("ArtoPay SDK Demo", payment_msg);
                     }
                 }
             });
@@ -80,34 +80,6 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                 PaymentMetadata metadata = new PaymentMetadata();
                 metadata.orderId = "order_"+randomNum;
                 param.metadata = metadata;
-//
-//                OPGProcessor repo = new OPGProcessor(MainActivity.this, "DEV", CLIENT_SECRET);
-//                repo.doGetToken(param, new OPGProcessor.PaymentCallback() {
-//                    @Override
-//                    public void onSuccess(PaymentIntentResponse response) {
-//                        System.out.println("--- CREATE PAYMENT INTENT RESPONSE ---");
-//                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//                        String prettyJson = gson.toJson(response);
-//                        System.out.println("Raw payment intent response: "+ prettyJson);
-//                        System.out.println("Payment ID: "+response.id);
-//                        System.out.println("Token: "+response.customerToken);
-//                        System.out.println("Client secret: "+response.clientSecret);
-//
-//                        Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
-//                        checkoutIntent.putExtra("ENV", "DEV");
-//                        checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
-//                        checkoutIntent.putExtra("CLIENT_SECRET",response.clientSecret);
-//                        checkoutIntent.putExtra("PAYMENT_ID",response.id);
-//                        checkoutIntent.putExtra("CUSTOMER_TOKEN",response.customerToken);
-//                        startForResult.launch(checkoutIntent);
-//                    }
-//
-//                    @Override
-//                    public void onError(String errorMessage) {
-//                        System.out.println("Create payment intent error: "+errorMessage);
-//                        Toast.makeText(MainActivity.this, "Create payment intent error: "+errorMessage, Toast.LENGTH_LONG).show();
-//                    }
-//                });
 
                 String jsonString = new Gson().toJson(param);
                 JSONObject jsonObject = null;
@@ -115,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                     jsonObject = new JSONObject(jsonString);
 
                     AndroidNetworking.post("https://api-dev.arto-pay.com/v1/payment-intents")
-                            .addHeaders("X-Secret-Key", CLIENT_SECRET)
+                            .addHeaders("X-Secret-Key", X_CLIENT_SECRET)
                             .addJSONObjectBody(jsonObject)
                             .setTag("test")
                             .setPriority(Priority.MEDIUM)
@@ -128,31 +100,24 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
                                     System.out.println("FAN response: "+response.toString());
                                     Intent checkoutIntent = new Intent(MainActivity.this, OPGActivity.class);
                                     checkoutIntent.putExtra("ENV", "DEV");
-                                    checkoutIntent.putExtra("PUBLIC_KEY", PUBLIC_KEY);
+                                    checkoutIntent.putExtra("PUBLIC_KEY", X_PUBLIC_KEY);
                                     checkoutIntent.putExtra("CLIENT_SECRET",piresponse.clientSecret);
                                     checkoutIntent.putExtra("PAYMENT_ID",piresponse.id);
                                     checkoutIntent.putExtra("CUSTOMER_TOKEN",piresponse.customerToken);
                                     checkoutIntent.putExtra("ORDER_ID", piresponse.id);
                                     startForResult.launch(checkoutIntent);
-//                                    System.out.println("Client secret: "+piresponse.clientSecret);
-//                                    System.out.println("Intent ID: "+piresponse.id);
-//                                    System.out.println("Customer token: "+piresponse.customerToken);
                                 }
                                 @Override
                                 public void onError(ANError error) {
                                     System.out.println("FAN error: "+error.getErrorDetail());
+                                    showAlert("ArtoPay SDK Demo", error.getErrorDetail());
                                 }
                             });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-
-
             }
         });
-
 
         prepareDummyData();
 
@@ -180,10 +145,10 @@ public class MainActivity extends AppCompatActivity implements CartAdapter.OnCar
         tvTotal.setText("Total: Rp"+total);
     }
 
-    public void showAlert(String message){
+    public void showAlert(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("OPG SDK Demo")
+        builder.setTitle(title)
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
